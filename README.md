@@ -21,6 +21,7 @@ pnpm preview  # serve dist/ at http://127.0.0.1:4321
 - `/config/`, `/config/layout/`, `/config/reindex/`: configuration reference
 - `/concepts/design-notes/`: why tags+folders, markdown, no database
 - `/reference/cli/`: full `liber --help` mirror (v0.6.4)
+- `/dev/*`: internals for contributors (data model, ingest, mutations, search, automation, attachments, profiles/sync, web UI), split from `dev-docs.md`
 
 ## Deploy
 
