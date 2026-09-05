@@ -17,7 +17,7 @@ export default defineConfig({
       description:
         'Cross-platform, private, local CLI bookmark manager: plain-text HTML, JSON index, no database.',
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/naurias/liber' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/liber-bkm/liber' },
       ],
       customCss: ['./src/styles/custom.css'],
       sidebar: [
