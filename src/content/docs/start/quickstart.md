@@ -1,0 +1,117 @@
+---
+title: Quickstart
+description: Install liber, learn the basics, and see every command at a glance.
+---
+
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
+
+## 1. Install first
+
+liber is a native binary. Pick your platform below. Optional features need `fzf` (live search), `single-file-cli` (full-page archive), and `git` (history and sync).
+
+<CardGrid>
+  <Card title="Linux" icon="linux">
+    Generic binary, Arch Linux, or NixOS flake.
+
+    <LinkButton href="/install/linux/" icon="document">Linux install</LinkButton>
+  </Card>
+  <Card title="macOS" icon="apple">
+    Build from source with Homebrew dependencies.
+
+    <LinkButton href="/install/macos/" icon="document">macOS install</LinkButton>
+  </Card>
+  <Card title="Windows" icon="seti:windows">
+    Installer-based setup.
+
+    <LinkButton href="/install/windows/" icon="document">Windows install</LinkButton>
+  </Card>
+</CardGrid>
+
+## 2. Basics
+
+By default liber stores bookmarks in a `Bookmarks` folder inside your home directory. Run `liber` with no arguments to list flags.
+
+```sh
+liber <url>                    # save a bookmark
+liber <url> -i                 # save interactively (title, tags, folder prompts)
+liber <url> -md -a             # also write markdown notes copy + full-page archive
+liber <url> -t news reading -f articles  # tags + subfolder at creation
+
+liber -s                       # search/browse (fzf live preview if installed)
+liber -l                       # list all bookmarks with ids
+liber -o 3                     # open bookmark 3 in the browser
+liber -e 3                     # edit bookmark 3 interactively
+liber -d 3                     # delete bookmark 3 (asks first)
+
+liber --serve                  # local web UI at http://127.0.0.1:8080
+liber config                   # show config file and bookmark locations
+```
+
+Flags combine freely, e.g. `liber <url> -i -t news reading -f articles -md -a`.
+
+## 3. Bird's-eye view
+
+Every command in one place (details live under [Guide](/guide/adding/) and [Reference](/reference/cli/)):
+
+```text
+liber <url>                    save a bookmark
+liber <url> -i                 save interactively (prompts for description, tags, folder)
+liber <url> -md                also write a markdown copy
+liber <url> -a                 also write a full-page archive (requires 'single-file')
+liber <url> -md -a             both markdown and archive
+liber <url> -t tag-a tag-b     attach tags at creation time
+liber <url> -f subfold         save into a subfolder of the base directory
+liber <url> -at report.pdf     attach a local file (repeatable; see "Attachments")
+liber -o 3                     open bookmark id 3
+liber -o 1,3-8                 open bookmarks at ids 1 and 3 to 8
+liber -s                       search/browse bookmarks, open or edit them (fzf if available)
+liber -sn / -su / -st / -sd / -sf
+                               same, but scoped to one field: title / url / tags / description / folder
+liber -sdf                     fields combine freely, e.g. this is folder+description only
+liber -sl                      force the plain prompt even if fzf is installed
+liber -sld                     legacy prompt scoped to descriptions (mix -l with any of n/u/t/d/f)
+liber -s --deep / -sl --deep   also full-text search inside archived pages (see "Deep search")
+liber -l                       list all bookmarks with their ids
+liber -e <id>                  edit a bookmark interactively (also offers to add a
+                               markdown copy or archive if either is missing)
+liber -e <id> -t tag-a tag-b   set a bookmark's tags directly (non-interactive)
+liber -e <id> -f subfold       move a bookmark to a different folder (non-interactive)
+liber -e <id> -md              add a markdown copy if it doesn't have one yet
+liber -e <id> -a               add an archive if it doesn't have one yet
+liber -e <id> -u <new-url>     edit url of specific id
+liber -e <id> -at report.pdf   attach a file to an existing bookmark (repeatable)
+liber -e <id> -dt report.pdf   detach by name or number (deletes the saved copy)
+liber -e <ids> ...             <id> can be a range/list too: 1-3, 2,5,3, or 1-4,7-9 --
+                               applies the same flags (or interactive edit, one at a
+                               time) to each matched bookmark; see "Batch operations"
+liber -d <id>                  delete a bookmark (asks for confirmation)
+liber -d <id> -y               delete without confirmation
+liber -d <ids>                 <id> can be a range/list too, same as -e above
+liber -r                       reindex: clean up + renumber (see "Reindexing")
+liber --import <path>          import a browser bookmark export (see "Import")
+liber --import <path> -md -a   same, also generating markdown/archives for each (slow)
+liber --tags / --folders       list tags/folders with counts (see "Tag and folder hygiene")
+liber --tags rename <a> <b>    rename a tag everywhere (merges if <b> already exists)
+liber --tags delete <tag>      remove a tag from every bookmark that has it
+liber --folders rename <a> <b> rename a folder (and its subfolders) everywhere
+liber --folders delete <f>     move a folder's bookmarks back to the root
+liber --history                list bookmarks by most recently opened (see "History")
+liber --auto add --match <s> --folder <f> --tag <t1 t2>
+                               auto-classify new bookmarks by URL (see "Automation")
+liber --auto / --auto edit / --auto delete / --auto apply
+                               list/edit/delete/re-run automations (see "Automation")
+liber --profile                list profiles, with the active one marked (see "Profiles")
+liber --profile <name>         switch to <name>, creating it if it's new
+liber --profile default        switch back to the non-profile layout
+liber --profile delete <name>  stop tracking a profile (its data is untouched)
+liber --sync / --sync -p       commit (and optionally push) if it's a jj/git repo (see "Sync")
+liber config                   show the active config file and its path
+liber -v                       print the version
+liber --serve                  local web UI for search + add (see "Web UI")
+liber --serve --addr <host:port>
+                               use a different address (default 127.0.0.1:8080)
+liber --export-site            export to a static html
+liber --export-site <path>     export to a specific path
+```
+
+Next: [Adding bookmarks](/guide/adding/) for creation details, [Searching](/guide/searching/) for search scoping.

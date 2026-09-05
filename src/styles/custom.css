@@ -1,0 +1,90 @@
+/* Gruvbox theme for liber docs, matching the liber Web UI toggle.
+   Dark defaults on :root, light overrides under [data-theme='light'].
+   Palette: https://github.com/morhetz/gruvbox */
+
+:root {
+  /* Accent: burnt-orange actions, yellow for high-contrast text/links-hover */
+  --sl-color-accent-low: #3c3836;
+  --sl-color-accent: #fe8019;
+  --sl-color-accent-high: #fabd2f;
+
+  /* Neutrals: warm gruvbox ramp instead of Starlight's cool grays */
+  --sl-color-white: #ebdbb2;
+  --sl-color-gray-1: #ebdbb2;
+  --sl-color-gray-2: #d5c4a1;
+  --sl-color-gray-3: #a89984;
+  --sl-color-gray-4: #928374;
+  --sl-color-gray-5: #665c54;
+  --sl-color-gray-6: #3c3836;
+  --sl-color-black: #1d2021;
+
+  /* Surfaces */
+  --sl-color-bg: #282828;
+  --sl-color-bg-nav: #1d2021;
+  --sl-color-bg-sidebar: #282828;
+  --sl-color-bg-inline-code: #3c3836;
+  --sl-color-hairline: #504945;
+
+  ::selection {
+    background: #fabd2f;
+    color: #1d2021;
+  }
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #ebdbb2;
+  --sl-color-accent: #af3a03;
+  --sl-color-accent-high: #3c3836;
+
+  --sl-color-white: #282828;
+  --sl-color-gray-1: #3c3836;
+  --sl-color-gray-2: #504945;
+  --sl-color-gray-3: #665c54;
+  --sl-color-gray-4: #7c6f64;
+  --sl-color-gray-5: #a89984;
+  --sl-color-gray-6: #ebdbb2;
+  --sl-color-black: #fbf1c7;
+
+  --sl-color-bg: #fbf1c7;
+  --sl-color-bg-nav: #f9f5d7;
+  --sl-color-bg-sidebar: #fbf1c7;
+  --sl-color-bg-inline-code: #ebdbb2;
+  --sl-color-hairline: #d5c4a1;
+
+  ::selection {
+    background: #d65d0e;
+    color: #fbf1c7;
+  }
+}
+
+/* Hero stays readable on the warm background in both themes. */
+.hero {
+  --sl-color-accent-high: var(--sl-color-accent-high);
+}
+
+/* Homepage preview GIFs: small, side-by-side, collapse to one column on narrow screens. */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 1rem;
+  margin-block: 1rem;
+}
+
+.preview-grid figure {
+  margin: 0;
+}
+
+.preview-grid img {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  border: 1px solid var(--sl-color-hairline);
+  border-radius: 0.5rem;
+  background: var(--sl-color-black);
+}
+
+.preview-grid figcaption {
+  margin-top: 0.5rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+}

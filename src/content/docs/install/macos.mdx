@@ -1,0 +1,24 @@
+---
+title: Install on macOS
+description: Install liber on macOS.
+---
+
+1. Install optional dependencies for search and archiving:
+
+```sh
+brew install fzf
+# single-file-cli: via Homebrew or https://github.com/gildas-lormeau/single-file-cli
+```
+
+2. Clone or download the source tarball from the [latest release](https://github.com/naurias/liber/releases/latest).
+
+3. Build with Go 1.22+ and place the binary in your `PATH`:
+
+```sh
+git clone https://github.com/naurias/liber.git
+cd liber
+go build -o liber .
+mv liber ~/.local/bin/ # or /usr/local/bin
+```
+
+Run `liber config` to locate the config file and set `base_dir` as needed.

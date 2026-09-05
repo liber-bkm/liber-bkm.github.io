@@ -1,0 +1,30 @@
+---
+title: Automation
+description: Rule-based auto-classification of bookmarks by URL, host, or title.
+---
+
+```sh
+liber --auto add --match <s> --folder <f> --tag <t1 t2>
+liber --auto                                  # list rules + classified counts
+liber --auto edit <id> --folder other         # change a rule
+liber --auto edit <id> --folder x --reapply   # change AND re-sync matching bookmarks
+liber --auto delete <id>                      # remove a rule (bookmarks keep state)
+liber --auto apply                            # re-run all rules
+liber --auto apply <id>                       # re-run one rule
+```
+
+Match targets (case-insensitive substring):
+
+```sh
+liber --auto add --match doxy --folder hot                 # URL (default)
+liber --auto add --match host:github.com --folder code     # host only, port ignored
+liber --auto add --match "title:how to" --tag reference    # title only
+```
+
+Guarantees:
+
+- **Explicit choice wins.** `-f` at creation (or a folder from a browser import) always beats a folder rule; tags are additive either way.
+- **Decisions are never reopened.** Each rule gets one look per bookmark (tracked ledger). Re-running apply or adding unrelated rules won't move an already-classified bookmark.
+- **Manual moves stick.** Once you move a bookmark, automation leaves it alone.
+- Editing a rule only affects future bookmarks unless you pass `--reapply`, which advances only bookmarks still sitting where that rule put them.
+- Deleting a rule removes the definition only.

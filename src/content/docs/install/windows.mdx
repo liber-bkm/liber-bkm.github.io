@@ -1,0 +1,18 @@
+---
+title: Install on Windows
+description: Install liber on Windows.
+---
+
+import { LinkButton } from '@astrojs/starlight/components';
+
+{/* Download link intentionally empty for now; wired to releases later. */}
+<LinkButton href="" icon="download">Download liber-setup.exe</LinkButton>
+
+1. Download `liber-setup.exe` from the [latest releases](https://github.com/naurias/liber/releases/latest) and install it as any other `.exe`.
+2. Open a terminal (Windows Terminal or [wezterm](https://wezterm.org/index.html) recommended for heavy CLI use, otherwise `liber --serve` opens the web UI).
+3. Run `liber config` to find the config directory and set it up.
+
+Archiving notes:
+
+- Set `singlefile_browser_path` in `config.json` to e.g. `firefox.exe` or a full `C:\Program Files\...` path.
+- If archiving doesn't work by default, set `singlefile_cmd` to `single-file.exe`.

@@ -1,0 +1,58 @@
+---
+title: liber
+description: Cross-platform, private, local CLI bookmark manager.
+template: splash
+hero:
+  tagline: "Simple, private, local CLI bookmark manager: bookmarks as browsable plain-text HTML files, with a JSON index and no database."
+  actions:
+    - text: Get liber
+      link: '#download'
+      icon: down-arrow
+      variant: primary
+    - text: Get started
+      link: /start/quickstart/
+      icon: right-arrow
+      variant: secondary
+    - text: View on GitHub
+      link: https://github.com/naurias/liber
+      icon: github
+      variant: minimal
+      attrs: { target: _blank, rel: noopener }
+---
+
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
+
+liber is a cross-platform CLI bookmark manager. It saves bookmarks as browsable plain-text HTML files, optionally archives pages and keeps markdown notes, and includes a local web UI.
+
+## See it in action
+
+<div class="preview-grid">
+  <figure>
+    <img src="/liber-cli.gif" alt="liber CLI: saving, searching, and editing bookmarks in the terminal" loading="lazy" decoding="async" width="480" />
+    <figcaption>CLI: save, search, and edit without leaving the terminal.</figcaption>
+  </figure>
+  <figure>
+    <img src="/liber-webui.gif" alt="liber web UI: browsing, adding, and editing bookmarks in the browser" loading="lazy" decoding="async" width="480" />
+    <figcaption>Web UI: browse, add, and edit in the browser.</figcaption>
+  </figure>
+</div>
+
+## Download
+
+<CardGrid>
+  <Card title="Linux" icon="linux">
+    Generic binary, Arch Linux, or NixOS flake.
+
+    <LinkButton href="/install/linux/" icon="document">Linux install</LinkButton>
+  </Card>
+  <Card title="macOS" icon="apple">
+    Build from source with Homebrew dependencies.
+
+    <LinkButton href="/install/macos/" icon="document">macOS install</LinkButton>
+  </Card>
+  <Card title="Windows" icon="seti:windows">
+    Installer-based setup.
+
+    <LinkButton href="/install/windows/" icon="document">Windows install</LinkButton>
+  </Card>
+</CardGrid>
