@@ -15,7 +15,7 @@ export default defineConfig({
     starlight({
       title: 'liber',
       description:
-        'Cross-platform, private, local CLI bookmark manager: plain-text HTML, JSON index, no database.',
+        'A cross-platform CLI bookmark manager that saves your bookmarks as plain-text HTML with powerful search, tags and folders. It includes a web UI for managing everything in the browser, archives pages for offline reading, and keeps markdown notes and file attachments for additional content.',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/liber-bkm/liber' },
       ],
@@ -56,6 +56,7 @@ export default defineConfig({
             { label: 'Overview', slug: 'config' },
             { label: 'Directory layout', slug: 'config/layout' },
             { label: 'Reindexing', slug: 'config/reindex' },
+            { label: 'Archive backends', slug: 'config/archive-backends' },
           ],
         },
         {
@@ -76,6 +77,7 @@ export default defineConfig({
             { label: 'Search internals', slug: 'dev/search' },
             { label: 'Automation internals', slug: 'dev/automation' },
             { label: 'Attachments internals', slug: 'dev/attachments' },
+            { label: 'Archive backends internals', slug: 'dev/archive-backends' },
             { label: 'Profiles and sync', slug: 'dev/profiles-sync' },
             { label: 'Web UI and export', slug: 'dev/webui' },
           ],

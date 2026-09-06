@@ -3,6 +3,8 @@ title: Sync
 description: Commit (and optionally push) your collection with git or jj.
 ---
 
+Since the whole collection is flat files and JSON, liber uses git (or jj) for syncing and history. There is no server or account: `liber --sync` commits the current state of your collection in place, and `-p` pushes it wherever your repo already points.
+
 ```sh
 liber --sync        # commit if base_dir is inside a git/jj repo
 liber --sync -p     # commit, then push

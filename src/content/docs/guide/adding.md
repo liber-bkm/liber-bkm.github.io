@@ -7,7 +7,7 @@ description: Create bookmarks interactively or in one shot, with markdown, archi
 liber <url>                          # basic save
 liber <url> -i                       # interactive: prompts for title, tags, subfolder
 liber <url> -md                      # also write a markdown copy (personal notes)
-liber <url> -a                       # also write a full-page archive (needs single-file)
+liber <url> -a                       # also write a full-page archive (backend via archive_backend)
 liber <url> -t tag-a tag-b           # space-separated tags
 liber <url> -f folder-name           # subfolder of the base directory
 liber <url> -at report.pdf           # attach a local file (repeatable)
@@ -17,7 +17,7 @@ liber <url> -i -t news -f articles -md -a  # everything combined
 ## Markdown copies vs archives
 
 - **Markdown** is for your own notes and description per bookmark, not a page conversion. You can add it later with `liber -e <id> -md`.
-- **Archive** is a full-page snapshot via `single-file-cli`. You can add it later with `liber -e <id> -a`.
+- **Archive** is a full-page snapshot through the configured backend (`single-file`, `monolith`, or the built-in `native`; `auto` by default). See [Archive backends](/config/archive-backends/). You can add it later with `liber -e <id> -a`.
 - Each bookmark's HTML, markdown, and archive share the same id-slug basename and point at each other in the index. Adding a missing copy reuses the original basename, never overwrites an existing one.
 
 ## Duplicate detection

@@ -24,7 +24,7 @@ Picking a bookmark in `liber -s` opens an open / edit / delete menu.
 
 ## Deep search
 
-`--deep` adds archive content as an extra match surface on top of whatever scope is active: it never narrows, only widens. You are prompted once for a literal query, then browse the matches in fzf or the plain picker.
+`--deep` adds archive content as an extra match surface on top of whatever scope is active: it never narrows, only widens. It works identically on all [archive backends](/config/archive-backends/) since the output is always a regular HTML file. You are prompted once for a literal query, then browse the matches in fzf or the plain picker.
 
 ## History
 

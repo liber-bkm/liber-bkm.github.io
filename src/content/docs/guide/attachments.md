@@ -3,6 +3,8 @@ title: Attachments
 description: Attach local files to bookmarks and manage them.
 ---
 
+Attachments are any files associated with a bookmark: a PDF paper, a screenshot, a downloaded dataset, an extra snapshot of the page. They are stored alongside the collection and travel with the bookmark when it is edited, moved, or deleted.
+
 Files are **copied** into `<base_dir>/attachments/` (moving or deleting the original afterwards changes nothing), named `<id>-<slug>.<ext>`, and tracked on the bookmark's index entry.
 
 ```sh

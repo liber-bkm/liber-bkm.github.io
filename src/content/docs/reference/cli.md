@@ -12,23 +12,25 @@ Usage:
   liber <url>                    save a bookmark
   liber <url> -i                 save interactively (prompts for description, tags, folder)
   liber <url> -md                also write a markdown copy
-  liber <url> -a                 also write a full-page archive (requires the 'single-file' CLI)
+  liber <url> -a                 also write a full-page archive; backend is chosen by
+                                   config archive_backend: auto (default) tries single-file,
+                                   then monolith, then the built-in static snapshot
   liber <url> -md -a             both markdown and archive
   liber <url> -t tag-a tag-b     attach tags at creation time
   liber <url> -f subfold         save into a subfolder of the base directory
   liber <url> -at report.pdf     attach a file (repeatable; copied into the collection)
   liber -s                       search/browse bookmarks, open or edit them
   liber -sn / -su / -st / -sd / -sf
-                                  same, but restricted to one field: title / url / tags /
-                                  description / folder (combine freely, e.g. -sdf = folder+description)
+                                   same, but restricted to one field: title / url / tags /
+                                   description / folder (combine freely, e.g. -sdf = folder+description)
   liber -sl                      force the plain prompt (skip fzf even if installed)
   liber -sld                     legacy prompt restricted to descriptions (mix -l with any of n/u/t/d/f)
   liber -s --deep                also full-text search inside archived pages (asks for a query
-                                  first, then browses matches; combine with -sn/-sd/etc as usual)
+                                   first, then browses matches; combine with -sn/-sd/etc as usual)
   liber -sl --deep               same, forced to the plain prompt
   liber -l                       list all bookmarks with their ids
   liber -e <id>                  edit a bookmark interactively (also offers to add a
-                                  markdown copy or archive if either is missing)
+                                   markdown copy or archive if either is missing)
   liber -e <id> -t tag-a tag-b   set a bookmark's tags directly
   liber -e <id> -f subfold       move a bookmark to a different folder
   liber -e <id> -u <url>         change a bookmark's URL (the saved html/material
@@ -100,7 +102,7 @@ Flags may be combined, e.g.:
 
 Search behavior notes from `--help`:
 
-- `liber -s` uses fzf if on `PATH` (title/url/tags/folder + badges + detail preview), else a plain numbered prompt; `-sl` forces plain.
+- `liber -s` uses fzf if on `PATH` (title/url/tags/folder plus badges plus detail preview), else a plain numbered prompt; `-sl` forces plain.
 - Attachments live in `<base_dir>/attachments`; badges `att`/`attN` show counts.
 - URL dedupe ignores trailing slashes, tracking params, and default ports: add prompts, `--import` skips silently.
 - Config: `$XDG_CONFIG_HOME/liber/config.json` (created on first run).

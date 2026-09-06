@@ -1,22 +1,27 @@
 ---
 title: Install on Linux
-description: Install liber on generic Linux, Arch Linux, or NixOS.
+description: Install liber on Linux from source, on Arch Linux, on NixOS, or via the generic binary.
 ---
 
 import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
-Optional features need `fzf` (live search), `single-file-cli` (full-page archive), and `git` (history and sync). liber itself has no runtime dependencies.
+Optional features need `fzf` (live search), an archiver (`single-file-cli` or [monolith](https://github.com/y2z/monolith); the built-in `native` backend needs nothing), and `git` (history and sync). liber itself has no runtime dependencies.
 
 <Tabs>
-<TabItem label="Generic Linux">
+<TabItem label="From source">
 
-Download the binary from [latest releases](https://github.com/liber-bkm/liber/releases/latest) and place it in your `PATH`:
+Requires Go 1.22 or later:
 
 ```sh
-# e.g.
-/usr/local/bin
-# or
-~/.local/bin
+git clone https://github.com/liber-bkm/liber.git
+cd liber
+go build -o liber .
+```
+
+Or with the Makefile:
+
+```sh
+make && sudo make install
 ```
 
 </TabItem>
@@ -59,24 +64,23 @@ nix run github:liber-bkm/liber
 ```
 
 :::note
-Nix and Arch builds don't ship optional dependencies. Install `fzf` and `single-file-cli` separately.
+Nix and Arch builds don't ship optional dependencies. Install `fzf` and an archiver (`single-file-cli` or `monolith`) separately.
 :::
 
 </TabItem>
-<TabItem label="From source">
+<TabItem label="Generic Linux">
 
-Requires Go 1.22 or later:
+:::caution
+If you're not on Arch Linux or NixOS, building from source (first tab) is the better option: it takes a minute with Go 1.22 or later and guarantees the binary matches your system. Use the generic binary below only if you specifically want a prebuilt one.
+:::
 
-```sh
-git clone https://github.com/liber-bkm/liber.git
-cd liber
-go build -o liber .
-```
-
-Or with the Makefile:
+Download the binary from [latest releases](https://github.com/liber-bkm/liber/releases/latest) and place it in your `PATH`:
 
 ```sh
-make && sudo make install
+# e.g.
+/usr/local/bin
+# or
+~/.local/bin
 ```
 
 </TabItem>

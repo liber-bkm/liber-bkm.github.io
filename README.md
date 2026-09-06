@@ -15,17 +15,11 @@ pnpm preview  # serve dist/ at http://127.0.0.1:4321
 ## Pages
 
 - `/`: short description + Download (Linux → `/install/linux/`, macOS → `/install/macos/`, Windows → `/install/windows/`) + GitHub link
-- `/install/linux/`, `/install/macos/`, `/install/windows/`: from `docs.md`; Windows download button is an intentionally empty `href` placeholder
+- `/install/linux/`, `/install/macos/`, `/install/windows/`: install guides; Windows has a live `liber-setup.exe` download button
 - `/start/quickstart/`: install heads-up, basics, and full command overview
-- `/guide/*`: adding, searching, editing, attachments, tags-folders, import, automation, sync, profiles, web-ui, static-export, completions (split from `docs.md` + `docs2.md`)
-- `/config/`, `/config/layout/`, `/config/reindex/`: configuration reference
+- `/guide/*`: adding, searching, editing, attachments, tags-folders, import, automation, sync, profiles, web-ui, static-export, completions (from `docs.md` + `Project-readme.md`)
+- `/config/`, `/config/layout/`, `/config/reindex/`, `/config/archive-backends/`: configuration reference
 - `/concepts/design-notes/`: why tags+folders, markdown, no database
 - `/reference/cli/`: full `liber --help` mirror (v0.6.4)
-- `/dev/*`: internals for contributors (data model, ingest, mutations, search, automation, attachments, profiles/sync, web UI), split from `dev-docs.md`
+- `/dev/*`: internals for contributors (data model, ingest, mutations, search, automation, attachments, archive backends, profiles/sync, web UI), split from `dev-docs.md`
 
-## Deploy
-
-Push the contents of this folder to the repo root of `liber-bkm.github.io`.
-`.github/workflows/deploy.yml` builds with pnpm (Node 22) and deploys on
-every push to `main`. One manual step in the repo settings: Settings →
-Pages → Build and deployment → Source: **GitHub Actions**.

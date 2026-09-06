@@ -21,6 +21,7 @@ Three principles explain most design decisions in the codebase:
 | [Search internals](/dev/search/) | Flag grammar, fzf protocol, deep search | `main.go`, `store.go`, `fzf.go`, `preview.go`, `deepsearch.go` |
 | [Automation internals](/dev/automation/) | Matching, the applied-rules ledger, reapply | `automation.go`, `create.go` |
 | [Attachments internals](/dev/attachments/) | Record shape, naming, reindex and web handling | `attach.go`, `reindex.go`, `webui.go` |
+| [Archive backends internals](/dev/archive-backends/) | `runArchive` dispatch, monolith pipe, native snapshot engine | `archive.go`, `archive_native.go` |
 | [Profiles and sync](/dev/profiles-sync/) | `effectiveBaseDir`, repo discovery | `config.go`, `profile.go`, `sync.go` |
 | [Web UI and export](/dev/webui/) | Templates, reuse of CLI machinery, concurrency, pagination, static export | `webui.go`, `render.go`, `export_site.go` |
 

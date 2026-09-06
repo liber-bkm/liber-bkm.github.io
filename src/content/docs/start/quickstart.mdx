@@ -7,11 +7,18 @@ import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
 ## 1. Install first
 
-liber is a native binary. Pick your platform below. Optional features need `fzf` (live search), `single-file-cli` (full-page archive), and `git` (history and sync).
+liber is a native binary. Pick your platform below. Optional features need a few extra tools (all linked, none required up front):
+
+- [fzf](https://github.com/junegunn/fzf): fuzzy finder for live search
+- [single-file-cli](https://github.com/gildas-lormeau/single-file-cli): full-page archive rendered in a headless browser
+- [monolith](https://github.com/y2z/monolith): alternative archiver, no browser needed
+- [git](https://git-scm.com): history and syncing
+
+The built-in `native` archive backend needs nothing at all.
 
 <CardGrid>
   <Card title="Linux" icon="linux">
-    Generic binary, Arch Linux, or NixOS flake.
+    Build from source, Arch Linux, or NixOS flake.
 
     <LinkButton href="/install/linux/" icon="document">Linux install</LinkButton>
   </Card>
@@ -57,7 +64,8 @@ Every command in one place (details live under [Guide](/guide/adding/) and [Refe
 liber <url>                    save a bookmark
 liber <url> -i                 save interactively (prompts for description, tags, folder)
 liber <url> -md                also write a markdown copy
-liber <url> -a                 also write a full-page archive (requires 'single-file')
+liber <url> -a                 also write a full-page archive (backend set via
+                               config archive_backend: single-file / monolith / native)
 liber <url> -md -a             both markdown and archive
 liber <url> -t tag-a tag-b     attach tags at creation time
 liber <url> -f subfold         save into a subfolder of the base directory
