@@ -3,6 +3,14 @@ title: Configuration
 description: config.json location, fields, and resolved paths.
 ---
 
+Liber can be configured either using a config file `config.json` or using the web UI.
+
+## Web UI
+
+To configure liber using the web UI simply run `liber --serve` and navigate to settings. The detected paths and dependencies will be shown. You can choose the default ones or override with your own paths or settings. It also allows setting up your bookmarks location and automation rules. See the [settings page](/guide/web-ui/#settings-page) for details.
+
+## Config file
+
 On first run liber writes:
 
 ```sh

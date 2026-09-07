@@ -3,7 +3,14 @@ title: Automation
 description: Rule-based auto-classification of bookmarks by URL, host, or title.
 ---
 
-Automations are rules that sort bookmarks for you. Each rule watches for a text match in the URL, the host, or the title, and automatically files matching bookmarks into a folder, adds tags, or both. Rules apply to new bookmarks as they are created and can be re-run over bookmarks you already have.
+Automations are rules that sort bookmarks for you. Each rule watches for a text match in the URL, the host, or the title, and automatically files matching bookmarks into a folder, adds tags, or both. Rules apply to new bookmarks as they are created and can be re-run over bookmarks you already have. You can set up automation rules either using the CLI or the web UI.
+
+## Web UI
+
+Simply run `liber --serve` and navigate to settings in the top right corner, where you can set up automation rules accordingly. See the [settings page](/guide/web-ui/#settings-page).
+
+## CLI
+
 
 ```sh
 liber --auto add --match <s> --folder <f> --tag <t1 t2>

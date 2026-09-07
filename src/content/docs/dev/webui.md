@@ -21,6 +21,14 @@ description: Server-side templates, reuse of CLI machinery, the write lock, pagi
 
 `liber --export-site [dir]` (`export_site.go`) writes a single `index.html` (under `<base_dir>/site` by default) listing every bookmark grouped by folder, with links to the html/markdown/archive/attachment files. Links are `filepath.Rel` paths from the output directory to each file, so the export works with any output dir, not just the default. It's a pure, regenerable projection: re-running overwrites, nothing in the export is data. It serves a different need than `--serve` (something to drop onto any static host or open off disk, with no liber process running), and it deliberately does not chase visual parity with the web UI.
 
+## Settings page internals
+
+`/settings` (`settings.go`) writes to `config.json` via `SaveConfig` under `writeMu`, the same mutex as the other mutating handlers. Detection of tools is pure `exec.LookPath` probing plus the chromium-family probe that already existed in `archive.go`; the detected string is informational only, the stored value is whatever the user typed (empty means default). Because every handler calls `loadCfgAndStore()` per request, a saved setting is live immediately, with no restart or session state.
+
+The automation section reuses the same `createRule`/`editRule`/`applyRules` helpers that the `--auto` CLI commands now call (`automation.go`): the entire point of the refactor was to keep web and CLI behavior identical, including the backfill-on-add and reapply semantics. Anything automation-related should change those helpers, not copy logic into the handlers.
+
+`base_dir` is editable here, with a note that it repoints the collection rather than moving anything: changing a dir setting just changes where future requests resolve paths, nothing more.
+
 ## Pagination
 
 `paginate` (`webui.go`) is a pure function over an already-computed `[]*Bookmark`. It doesn't know or care whether that list came from a plain search, a scoped search, or `filterDeep`, which is what let pagination apply uniformly to all three without any special-casing in `handleSearch`. `webPageSize = 500` per what was asked: pagination is invisible (no controls rendered at all) for any result set of 500 or fewer, and only kicks in past that.

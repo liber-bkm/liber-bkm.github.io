@@ -3,6 +3,8 @@ title: Web UI
 description: Browse, add, and edit bookmarks in the browser.
 ---
 
+Liber provides a simple yet efficient and powerful web UI that allows you to add, edit, archive, and search bookmarks. It also has complete configuration options available so you can configure liber accordingly without needing the CLI. It automatically detects dependencies and suggests paths while also allowing overriding with your own settings.
+
 ```sh
 liber --serve
 liber --serve --addr 127.0.0.1:8181
@@ -13,6 +15,17 @@ Starts a local UI at `http://127.0.0.1:8080` for search, add, edit, and delete. 
 :::caution
 Binds to loopback by default and has no authentication, so anyone who can reach it can read and modify the collection. Binding elsewhere prints a warning.
 :::
+
+## Settings page
+
+`liber --serve`, then click the gear button (top right) or open `/settings` directly. The page covers:
+
+- **Tools.** For each external command (`singlefile_cmd`, `singlefile_browser_path`, `monolith_cmd`, `monolith_browser_path`, `browser_cmd`, `editor_cmd`) the page shows what liber detected on your machine and the current configured value. Leave a box empty to use the default; type a custom path to override it.
+- **Directories.** `base_dir`, `html_dir`, `markdown_dir`, `archive_dir`, `attachment_dir`, each with its effective resolved path shown. Changing `base_dir` points liber at a different collection; nothing is moved.
+- **Archiving.** `archive_backend` as a dropdown and the `monolith_use_browser` checkbox. See [Archive backends](/config/archive-backends/).
+- **Automation rules.** Add, edit, delete, and re-run, equivalent to `liber --auto`. The add form backfills matching existing bookmarks, the edit form has a `reapply` checkbox matching `--reapply` on the CLI, and rules edited here behave identically because web and CLI share the same helper functions.
+
+All changes write to `config.json` (or the rules in `index.json`) immediately; the settings page and any other open web tabs pick them up on their next request, no restart needed. The same page shows which file it wrote at the top.
 
 ## Bookmarklet
 
