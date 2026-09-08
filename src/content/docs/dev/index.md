@@ -3,8 +3,6 @@ title: Developer docs
 description: Internals, invariants, and gotchas for anyone reading or changing liber's source.
 ---
 
-Code comments point here (`see dev-docs.md#topic`) instead of carrying full explanations inline. User-facing behavior lives under [Guide](/guide/adding/) and [Reference](/reference/cli/); this section explains *why the code looks the way it does*.
-
 Three principles explain most design decisions in the codebase:
 
 1. **Recorded paths, never pattern matching.** Every file liber touches is named explicitly on its own bookmark's index record. Nothing ever finds files by glob or filename pattern. This single invariant is what makes reindexing, renames, and quarantine safe.
@@ -26,6 +24,3 @@ Three principles explain most design decisions in the codebase:
 | [Web UI and export](/dev/webui/) | Templates, reuse of CLI machinery, concurrency, pagination, static export | `webui.go`, `render.go`, `export_site.go` |
 | [Link health check](/dev/link-health/) | Worker pool, classification, check stamps, quarantine | `check.go`, `store.go` |
 
-:::caution
-Testing honesty is recorded where it matters: the jj sync path is implemented against jj's documented CLI but was never run against a real jj repo. Sanity-check it before relying on it.
-:::
