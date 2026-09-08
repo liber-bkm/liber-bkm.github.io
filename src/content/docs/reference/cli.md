@@ -58,6 +58,9 @@ Usage:
                                   outside liber (quarantining any surviving
                                   markdown/archive copy into <base_dir>/unindexed/),
                                   and renumber remaining ids to close gaps
+  liber -r --merge               merges the bookmarks incase of syncing using external tool
+                                 or manually copy pasting bookmarks, no data is lost, ids are reindexed
+                                 and duplicate urls are detected and prompted action 
   liber --import <path>          import a browser bookmark export (Netscape HTML format)
   liber --import <path> -md -a   same, also generating markdown/archives for each (slow)
   liber --tags                   list all tags with counts
