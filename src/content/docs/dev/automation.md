@@ -27,3 +27,7 @@ If a rule is edited such that it no longer matches a bookmark it previously clas
 If two folder rules could both match the same never-yet-classified bookmark, whichever is processed first (rules are processed in ascending id order) claims the folder; the second is still recorded in the ledger (so it won't retry later) even though its folder action didn't take effect. There's no priority/conflict system beyond creation order. This is a deliberate scope cut for an edge case that's unlikely to matter in practice.
 
 `--auto delete` only removes the rule definition. It does not touch any bookmark's current folder/tags or ledger entries. The classification a rule already produced is treated as the bookmark's own state going forward, same as if the user had set it by hand.
+
+## Learn
+
+`--auto learn` (`automation.go`) groups bookmarks by `hostOf(URL)` and keeps the top folder per host when its count reaches `--min` (default 3), skipping empty folders and hosts already covered by a `host:` rule. Suggestions sort by count descending. Creation reuses `createRule`, so backfill and ledger behavior match `--auto add` exactly.

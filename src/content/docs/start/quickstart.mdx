@@ -72,6 +72,8 @@ liber <url> -f subfold         save into a subfolder of the base directory
 liber <url> -at report.pdf     attach a local file (repeatable; see "Attachments")
 liber -o 3                     open bookmark id 3
 liber -o 1,3-8                 open bookmarks at ids 1 and 3 to 8
+liber -o <query>               find by search text (one match opens, several offer a pick)
+liber pick <query>             print the URL to stdout, for pipes and scripts
 liber -s                       search/browse bookmarks, open or edit them (fzf if available)
 liber -sn / -su / -st / -sd / -sf
                                same, but scoped to one field: title / url / tags / description / folder
@@ -104,16 +106,22 @@ liber --tags delete <tag>      remove a tag from every bookmark that has it
 liber --folders rename <a> <b> rename a folder (and its subfolders) everywhere
 liber --folders delete <f>     move a folder's bookmarks back to the root
 liber --history                list bookmarks by most recently opened (see "History")
+liber --check [ids]            check link health, then prompt per item (see "Link health")
+liber --check --workers N      same, with N parallel requests (default 12)
+liber --check --stale 720h     same, skipping recently checked bookmarks
 liber --auto add --match <s> --folder <f> --tag <t1 t2>
                                auto-classify new bookmarks by URL (see "Automation")
 liber --auto / --auto edit / --auto delete / --auto apply
                                list/edit/delete/re-run automations (see "Automation")
+liber --auto learn [--min N] [--create]
+                               suggest host rules from folder clusters
 liber --profile                list profiles, with the active one marked (see "Profiles")
 liber --profile <name>         switch to <name>, creating it if it's new
 liber --profile default        switch back to the non-profile layout
 liber --profile delete <name>  stop tracking a profile (its data is untouched)
 liber --sync / --sync -p       commit (and optionally push) if it's a jj/git repo (see "Sync")
 liber config                   show the active config file and its path
+liber config set <key> <val>   set one config key (validated before writing)
 liber -v                       print the version
 liber --serve                  local web UI for search + add (see "Web UI")
 liber --serve --addr <host:port>

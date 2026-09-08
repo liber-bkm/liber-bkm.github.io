@@ -24,6 +24,7 @@ Three principles explain most design decisions in the codebase:
 | [Archive backends internals](/dev/archive-backends/) | `runArchive` dispatch, monolith pipe, native snapshot engine | `archive.go`, `archive_native.go` |
 | [Profiles and sync](/dev/profiles-sync/) | `effectiveBaseDir`, repo discovery | `config.go`, `profile.go`, `sync.go` |
 | [Web UI and export](/dev/webui/) | Templates, reuse of CLI machinery, concurrency, pagination, static export | `webui.go`, `render.go`, `export_site.go` |
+| [Link health check](/dev/link-health/) | Worker pool, classification, check stamps, quarantine | `check.go`, `store.go` |
 
 :::caution
 Testing honesty is recorded where it matters: the jj sync path is implemented against jj's documented CLI but was never run against a real jj repo. Sanity-check it before relying on it.

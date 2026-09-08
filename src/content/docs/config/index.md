@@ -45,6 +45,15 @@ $XDG_CONFIG_HOME/liber/config.json    # usually ~/.config/liber/config.json
 liber config    # show active config file and resolved paths
 ```
 
+To change one key without editing JSON:
+
+```sh
+liber config set archive_backend monolith
+liber config set base_dir ~/Other-Bookmarks
+```
+
+Keys are validated before writing (`archive_backend` must be one of the four backends, `monolith_use_browser` a bool).
+
 :::caution
 If archiving silently does nothing, check dependencies and that `singlefile_browser_path` or the `monolith` options are set properly in `config.json`.
 :::

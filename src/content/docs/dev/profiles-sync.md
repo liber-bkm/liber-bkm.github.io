@@ -32,3 +32,7 @@ Scope is deliberately minimal: one commit, optionally one push (`-p`), nothing t
 **Testing status**: the git path is well-exercised (init, first commit, git's "nothing to commit" no-op detection, push failure surfacing git's real error, and a nested-repo `base_dir` all verified). The jj path (`jj commit`, `jj git push`) is implemented against jj's documented CLI but has not been run against a real jj repo, since jj wasn't available in the environment this was built in. Sanity-check it before relying on it.
 
 Note: jj's own concept also called "bookmarks" (its branch-like refs) is entirely unrelated to liber's bookmarks. It's a naming coincidence worth knowing about if the two are ever scripted together.
+
+## Changing keys without JSON
+
+`liber config set` (`config.go`) allowlists 13 keys and validates `archive_backend` and `monolith_use_browser` before `SaveConfig`; anything else errors without writing. Empty values are rejected (clear a key by editing the JSON).

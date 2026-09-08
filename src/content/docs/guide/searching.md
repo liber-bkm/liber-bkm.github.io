@@ -12,6 +12,8 @@ liber -s --deep                # also full-text search inside archived pages
 liber -l                       # list all bookmarks with ids
 liber -o 3                     # open bookmark 3
 liber -o 1,3-8                 # open several (same range/list syntax as -e/-d)
+liber -o "my query"            # one match opens directly, several offer a picker
+liber pick "my query"          # print the URL to stdout, for pipes and scripts
 liber --history                # recently opened, most recent first
 ```
 
@@ -25,6 +27,20 @@ Picking a bookmark in `liber -s` opens an open / edit / delete menu.
 ## Deep search
 
 `--deep` adds archive content as an extra match surface on top of whatever scope is active: it never narrows, only widens. It works identically on all [archive backends](/config/archive-backends/) since the output is always a regular HTML file. You are prompted once for a literal query, then browse the matches in fzf or the plain picker.
+
+## Open by name and pick
+
+Both use the full-scope search. `pick` keeps stdout clean (prompts go to stderr) and exits non-zero when nothing matches, so `liber pick x | xargs ...` is safe in pipes and scripts.
+
+## Result order
+
+Results order by relevance: title match first, then the other fields. To order differently:
+
+```sh
+liber -s --sort newest    # newest / oldest / visited / title
+```
+
+The web UI has the same sort box next to the search field.
 
 ## History
 

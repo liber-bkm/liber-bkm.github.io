@@ -39,4 +39,10 @@ javascript:location.href='http://127.0.0.1:8080/?prefill='+encodeURIComponent(lo
 
 - **Theme toggle**: top-right button switches Gruvbox light/dark, persisted in `localStorage`; OS `prefers-color-scheme` wins with no stored choice.
 - **Filter chips**: tags/folders in results are clickable (root `/` excluded) and jump to a scoped search.
-- **Attachments**: upload on add/edit forms (`attach files`, multi-select), open by name, remove via `remove` checkboxes on edit.
+- **Attachments**: upload on add/edit forms (`attach files`, multi-select), open by name, remove via `remove` checkboxes on edit. A single attachment links straight to the file; several link to the edit page.
+- **Live filter**: the box above the results narrows the shown rows as you type, client side only, within whatever search or page you are on.
+- **Sort**: the dropdown next to search orders by relevance (title match first), newest, oldest, visited, or title. Paging keeps the sort.
+- **Edit URL**: the edit page has a URL field (same rewrite as `-e -u`, empty is rejected). Tag and folder fields suggest existing values.
+- **Markdown view**: notes render as formatted HTML (headings, lists, code, links) instead of plain text.
+- **Card view**: each result links its saved card (`/card/<id>`), the same page the search picker's `(c)` action opens.
+- **Tags and folders page**: the `#` button opens counts with rename forms (applied directly, merging onto existing names) and guarded deletes, plus suggested automation rules with one-click create.

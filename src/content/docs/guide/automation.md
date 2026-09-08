@@ -20,6 +20,8 @@ liber --auto edit <id> --folder x --reapply   # change AND re-sync matching book
 liber --auto delete <id>                      # remove a rule (bookmarks keep state)
 liber --auto apply                            # re-run all rules
 liber --auto apply <id>                       # re-run one rule
+liber --auto learn                            # suggest host rules from folder clusters
+liber --auto learn --min 5 --create           # stricter threshold, create without asking
 ```
 
 Match targets (case-insensitive substring):
@@ -37,3 +39,7 @@ Guarantees:
 - **Manual moves stick.** Once you move a bookmark, automation leaves it alone.
 - Editing a rule only affects future bookmarks unless you pass `--reapply`, which advances only bookmarks still sitting where that rule put them.
 - Deleting a rule removes the definition only.
+
+## Learn
+
+`learn` groups your bookmarks by host and suggests a `host:` rule wherever 3 or more share one folder (tune with `--min N`). It only suggests by default and asks per rule; `--create` creates all without asking. Hosts already covered by a rule are skipped.
