@@ -13,7 +13,8 @@ Three principles explain most design decisions in the codebase:
 
 | Page | Covers | Main files |
 | ---- | ------ | ---------- |
-| [Data model and reindexing](/dev/data-model/) | Records, filenames, orphan cleanup, id compaction, why no database | `store.go`, `create.go`, `edit.go`, `reindex.go` |
+| [Data model and reindexing](/dev/data-model/) | Records, filenames, reindex pipeline, merge, journal, why no database | `store.go`, `create.go`, `edit.go`, `reindex.go`, `journal.go` |
+| [Merge conflict handling](/dev/merge-conflicts/) | Candidate scan, fold rules, base selection, journal replay order | `reindex.go` |
 | [Ingest: dedupe and import](/dev/ingest/) | URL normalization, Netscape parsing | `dedupe.go`, `import.go` |
 | [Mutations: taxonomy, history, batch](/dev/taxonomy/) | Rename-is-merge, open tracking, id specs | `taxonomy.go`, `search.go`, `idspec.go`, `delete.go` |
 | [Search internals](/dev/search/) | Flag grammar, fzf protocol, deep search | `main.go`, `store.go`, `fzf.go`, `preview.go`, `deepsearch.go` |

@@ -73,6 +73,7 @@ export default defineConfig({
           items: [
             { label: 'Overview', slug: 'dev' },
             { label: 'Data model and reindexing', slug: 'dev/data-model' },
+            { label: 'Merge conflict handling', slug: 'dev/merge-conflicts' },
             { label: 'Ingest: dedupe and import', slug: 'dev/ingest' },
             { label: 'Mutations: taxonomy, history, batch', slug: 'dev/taxonomy' },
             { label: 'Search internals', slug: 'dev/search' },

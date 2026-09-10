@@ -39,6 +39,7 @@ $XDG_CONFIG_HOME/liber/config.json    # usually ~/.config/liber/config.json
 | `monolith_cmd` | The `monolith` executable for the monolith backend (default `monolith`). Needs no browser and fits headless machines; it can't render JavaScript-driven pages on its own. |
 | `monolith_use_browser` + `monolith_browser_path` | When `monolith_use_browser` is `true`, liber renders the page with a headless chromium-family browser (`monolith_browser_path`, else `chromium` / `chromium-browser` / `google-chrome` from `PATH`) and pipes the DOM into monolith, archiving even JavaScript-rendered pages without a full single-file setup. |
 | `browser_cmd` | Override open command (default `xdg-open` / `open` / Windows handler). |
+| `device_id` | Per-device id used in journal filenames (generated on first write; change with `liber config set device_id <name>`). |
 | `editor_cmd` | Override markdown open command (default `$VISUAL`, then `$EDITOR`, then OS default). |
 
 ```sh

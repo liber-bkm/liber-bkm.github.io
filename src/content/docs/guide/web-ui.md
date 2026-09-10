@@ -25,7 +25,7 @@ Binds to loopback by default and has no authentication, so anyone who can reach 
 - **Archiving.** `archive_backend` as a dropdown and the `monolith_use_browser` checkbox. See [Archive backends](/config/archive-backends/).
 - **Automation rules.** Add, edit, delete, and re-run, equivalent to `liber --auto`. The add form backfills matching existing bookmarks, the edit form has a `reapply` checkbox matching `--reapply` on the CLI, and rules edited here behave identically because web and CLI share the same helper functions.
 
-All changes write to `config.json` (or the rules in `index.json`) immediately; the settings page and any other open web tabs pick them up on their next request, no restart needed. The same page shows which file it wrote at the top.
+All changes write to `config.json` (or the rules in `index.json`) immediately; the settings page and any other open web tabs pick them up on their next request, no restart needed. The same page shows which file it wrote at the top. A maintenance section on the same page runs the `liber -r` commands (merge, all, prune, compact, prune journal) with checkboxes and shows the report.
 
 ## Bookmarklet
 
