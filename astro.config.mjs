@@ -81,7 +81,6 @@ export default defineConfig({
             { label: 'Attachments internals', slug: 'dev/attachments' },
             { label: 'Archive backends internals', slug: 'dev/archive-backends' },
             { label: 'Profiles and sync', slug: 'dev/profiles-sync' },
-            { label: 'Merge Conflicts', slug: 'dev/merge-conflicts'},
             { label: 'Web UI and export', slug: 'dev/webui' },
             { label: 'Link health check', slug: 'dev/link-health' },
           ],

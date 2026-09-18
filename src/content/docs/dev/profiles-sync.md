@@ -33,6 +33,8 @@ Scope is deliberately minimal: one commit, optionally one push (`-p`), nothing t
 
 Note: jj's own concept also called "bookmarks" (its branch-like refs) is entirely unrelated to liber's bookmarks. It's a naming coincidence worth knowing about if the two are ever scripted together.
 
+The web `/profiles` page and the settings identity block reuse the same switch, create, and delete cores, so web and CLI profile behavior stay consistent.
+
 ## Changing keys without JSON
 
 `liber config set` (`config.go`) allowlists 13 keys and validates `archive_backend` and `monolith_use_browser` before `SaveConfig`; anything else errors without writing. Empty values are rejected (clear a key by editing the JSON).

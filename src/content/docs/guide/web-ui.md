@@ -23,9 +23,33 @@ Binds to loopback by default and has no authentication, so anyone who can reach 
 - **Tools.** For each external command (`singlefile_cmd`, `singlefile_browser_path`, `monolith_cmd`, `monolith_browser_path`, `browser_cmd`, `editor_cmd`) the page shows what liber detected on your machine and the current configured value. Leave a box empty to use the default; type a custom path to override it.
 - **Directories.** `base_dir`, `html_dir`, `markdown_dir`, `archive_dir`, `attachment_dir`, each with its effective resolved path shown. Changing `base_dir` points liber at a different collection; nothing is moved.
 - **Archiving.** `archive_backend` as a dropdown and the `monolith_use_browser` checkbox. See [Archive backends](/config/archive-backends/).
-- **Automation rules.** Add, edit, delete, and re-run, equivalent to `liber --auto`. The add form backfills matching existing bookmarks, the edit form has a `reapply` checkbox matching `--reapply` on the CLI, and rules edited here behave identically because web and CLI share the same helper functions.
+- **Automation rules.** Add, edit, delete, and re-run, equivalent to `liber --auto`. The add form backfills matching existing bookmarks, the edit form has a `reapply` checkbox matching `--reapply` on the CLI, and rules edited here behave identically because web and CLI share the same helper functions. Each rule also has its own apply button next to delete, and the tags page lets you tune the host rule threshold and create all suggestions at once.
+- **Identity.** The sync device id (`device_id`, editable) and the active profile (read only, switch it with the CLI `--profile`).
+- **Maintenance.** Runs the `liber -r` commands (merge, merge all, prune, compact, prune journal) with checkboxes and shows the report, the same thing `liber -r` does on the command line.
 
-All changes write to `config.json` (or the rules in `index.json`) immediately; the settings page and any other open web tabs pick them up on their next request, no restart needed. The same page shows which file it wrote at the top. A maintenance section on the same page runs the `liber -r` commands (merge, all, prune, compact, prune journal) with checkboxes and shows the report.
+All changes write to `config.json` (or the rules in `index.json`) immediately; the settings page and any other open web tabs pick them up on their next request, no restart needed. The same page shows which file it wrote at the top.
+
+## Library and sync tasks
+
+The settings page also covers tasks that mirror CLI commands:
+
+- **Import.** Upload a browser bookmark export file. Same duplicate skipping as `liber --import`. See [Importing](/guide/import/).
+- **Static export.** Same as `liber --export-site`, defaulting to `<base_dir>/site`. See [Static site export](/guide/static-export/).
+- **Sync.** Commit the collection with jj or git, with optional push. Same as `liber --sync`. See [Sync](/guide/sync/).
+- **Link health.** The `/check` page uses the same moved, dead, and uncertain buckets plus per item update, delete, and quarantine actions as `liber --check`. See [Link health](/guide/link-health/).
+- **Profiles.** The `/profiles` page lists, switches, creates, and deletes profiles, the same things `liber --profile` does on the command line. See [Profiles](/guide/profiles/).
+
+## History and opening
+
+- The clock button (top right) opens `/history`, the same list as `liber --history`.
+- Opening a bookmark from the web (`/open/<id>`, used by title and visit-original links) records the visit exactly like the CLI open action, so history and visited sort stay in sync.
+- `/pick?q=...` returns a matching URL as plain text, the web equivalent of `liber pick`. See [Searching and opening](/guide/searching/).
+
+## Bulk actions and forms
+
+- Search rows have checkboxes for bulk delete (with confirm), bulk tag set, and bulk folder move.
+- The add form accepts an optional title. When left empty the title is fetched the same way as on the CLI.
+- The edit form removes attachments by name as well as by checkbox.
 
 ## Bookmarklet
 

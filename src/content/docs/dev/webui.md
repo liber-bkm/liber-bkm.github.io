@@ -45,4 +45,20 @@ Page links (`pageURL`) are built by the handler, not the template, since `html/t
 
 ## Taxonomy page
 
-`/tags` (`taxonomy_web.go`) reuses the extracted `renameTag`/`deleteTag`/`renameFolder` cores plus `tagCounts`/`folderCounts`, so CLI and web share behavior including merge-onto-rename and subfolder handling. Renames POST directly (CLI-identical); deletes carry the JS confirm used by rule delete. All four POSTs take `writeMu` and redirect with flash counts. Root (`/`) renders with forms that fail cleanly through the cores' own validation. Learn suggestions (`learnRows` over `suggestRules`, exported fields only since templates cannot read unexported ones) render above the lists and create through the shared `createRule`, hiding entirely once covered.
+`/tags` (`taxonomy_web.go`) reuses the extracted `renameTag`/`deleteTag`/`renameFolder` cores plus `tagCounts`/`folderCounts`, so CLI and web share behavior including merge-onto-rename and subfolder handling. Renames POST directly (CLI-identical); deletes carry the JS confirm used by rule delete. All four POSTs take `writeMu` and redirect with flash counts. Root (`/`) renders with forms that fail cleanly through the cores' own validation. Learn suggestions (`learnRows` over `suggestRules`, exported fields only since templates cannot read unexported ones) render above the lists and create through the shared `createRule`, hiding entirely once covered. The page also exposes the learn threshold tuning plus create-all action, and each automation rule carries its own apply button next to delete.
+
+## History, open, and pick
+
+`/history` renders the same ordered list as `liber --history`. `/open/<id>` records the visit through the same tracking write as `open.go` and the search `(o)` action, so `visited` sort stays consistent between web and CLI. `/pick?q=...` returns a matching URL as plain text and mirrors `pick.go` semantics (single match prints, prompts go elsewhere, no match is an error). All three are read only apart from the history write on open, so they need no lock beyond that single tracked update.
+
+## Library and sync handlers
+
+Import, static export, repo sync, and link health reuse the CLI cores rather than duplicating logic. The import handler accepts a file upload and runs the same Netscape parse plus silent duplicate skip as `--import`. The export handler runs the same projection as `--export-site` with the same default output directory. The sync handler runs the same commit plus optional push as `--sync`. The `/check` handler runs the same moved, dead, and uncertain classification as `check.go` with per item update, delete, and quarantine actions. Mutating POSTs take `writeMu`; read only views do not.
+
+## Profiles page
+
+`/profiles` (`profile.go` cores) lists, switches, creates, and deletes profiles the same way `liber --profile` does. Switching only changes `ActiveProfile` in `config.json`; it never touches bookmark data. Delete refuses the active profile and never deletes on-disk data, matching the CLI guard.
+
+## Bulk actions
+
+Bulk delete, bulk tag set, and bulk folder move reuse `deleteBookmarkFiles`, the tag core, and `syncBookmarkFiles` respectively, so file moves and rewrites behave exactly like their single bookmark CLI equivalents. Bulk delete carries the same two step confirm pattern as single delete (`confirm=1` on resubmission). All bulk POSTs take `writeMu` around the full load, mutate, and save sequence.

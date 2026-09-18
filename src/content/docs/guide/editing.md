@@ -18,7 +18,7 @@ liber -d <id> -y               # delete without confirmation
 
 `<id>` accepts ranges and lists: `1-3`, `2,5,3`, `1-4,7-9`. Reversed ranges are swapped, duplicates deduped, results sorted ascending.
 
-- `liber -e 1-3 -md` adds markdown copies to 1–3 silently.
+- `liber -e 1-3 -md` adds markdown copies to 1-3 silently.
 - `liber -e` with no flags edits each match interactively in turn (`n of N` header).
 - `liber -d 1-4,7-9` shows one aggregate confirmation listing every title. Unknown ids are reported once at the end without aborting the batch.
 
