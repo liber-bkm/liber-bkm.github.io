@@ -1,0 +1,69 @@
+---
+title: Documentation index
+description: Every page on this site, grouped by section.
+---
+
+Every page on this site in one place. Start with [Quickstart](/start/quickstart/) if you are new; use the sidebar or search to navigate afterward.
+
+## Start
+
+- [Quickstart](/start/quickstart/): install pointers, 30-second basics, and the full command overview.
+
+## Install
+
+- [Linux](/install/linux/): build from source, Arch, NixOS, or the generic binary.
+- [macOS](/install/macos/): Homebrew dependencies plus a source build.
+- [Windows](/install/windows/): installer download and terminal setup.
+- [Android](/install/android/): release APK install and first-launch modes.
+
+## Guide
+
+- [Adding bookmarks](/guide/adding/): create interactively or in one shot, with markdown, archives, tags, folders, and attachments.
+- [Searching and opening](/guide/searching/): interactive search, field scoping, deep search, open by name, `pick`, result order, history.
+- [Editing and deleting](/guide/editing/): interactive and direct edits, URL changes, backfilling copies, batch id ranges.
+- [Attachments](/guide/attachments/): any files associated with a bookmark, and how to manage them.
+- [Tags and folders](/guide/tags-folders/): listing, rename-is-merge, deletes, subfolder behavior.
+- [Importing and exporting](/guide/import/): browser bookmark import and portable re-importable export.
+- [Automation](/guide/automation/): rules that file bookmarks by URL, host, or title match, plus rule learning.
+- [Syncing across devices](/guide/sync/): git, Syncthing, Nextcloud, Drive/Dropbox, Android, journal, merge workflow, recovery.
+- [Profiles](/guide/profiles/): fully independent bookmark collections under one config.
+- [Web UI](/guide/web-ui/): browser UI for search, edits, settings, and maintenance.
+- [Static site export](/guide/static-export/): one browsable `index.html` for hosting or offline use.
+- [Link health](/guide/link-health/): scan for moved, dead, and uncertain links with `--check`.
+- [Shell completions](/guide/completions/): tab-completion for bash, zsh, and fish.
+- [Android app](/guide/android/): using liber on your phone, standalone or server-connected.
+- [Self-hosting](/guide/self-hosting/): one server copy with phones and desktops as thin clients.
+
+## Configuration
+
+- [Configuration](/config/): `config.json` location, fields, and `config set`.
+- [Directory layout](/config/layout/): how bookmark files are organized on disk.
+- [Reindexing](/config/reindex/): adopt, relink, pending, merge, prune, and compact flags.
+- [Archive backends](/config/archive-backends/): single-file, monolith, and native snapshot engines with per-backend config.
+
+## Concepts
+
+- [Design notes](/concepts/design-notes/): why tags and folders both, markdown notes, and no database.
+
+## Reference
+
+- [CLI reference](/reference/cli/): the full `liber --help` mirror.
+
+## Developer
+
+- [Developer docs](/dev/): internals overview and file map.
+- [Data model and reindexing](/dev/data-model/): records, filenames, reindex pipeline, merge, journal.
+- [Merge conflict handling](/dev/merge-conflicts/): candidate scan, fold rules, base selection, replay order.
+- [Ingest: dedupe and import](/dev/ingest/): URL normalization and the Netscape parser.
+- [Mutations: taxonomy, history, batch](/dev/taxonomy/): rename-is-merge, open tracking, id specs, completions.
+- [Search internals](/dev/search/): flag grammar, fzf protocol, deep search, pick, ranking.
+- [Automation internals](/dev/automation/): matching, the applied-rules ledger, reapply, learn.
+- [Attachments internals](/dev/attachments/): record shape, naming, reindex and web handling.
+- [Archive backends internals](/dev/archive-backends/): dispatch, monolith pipe, native engine.
+- [Profiles and sync](/dev/profiles-sync/): `effectiveBaseDir`, repo discovery, `config set`.
+- [Web UI and export](/dev/webui/): templates, shared cores, concurrency, settings, pagination, export.
+- [Link health check](/dev/link-health/): worker pool, classification, stamps, quarantine.
+- [JSON API internals](/dev/api/): the endpoint surface the native client talks to.
+- [Android internals](/dev/android/): wrapper architecture, build, storage, theme, distribution.
+- [Web auth internals](/dev/web-auth/): token resolution, browser cookies, API bearers.
+- [Performance budgets](/dev/performance/): pinned scaling behavior and fix order.

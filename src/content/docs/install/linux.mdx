@@ -5,7 +5,11 @@ description: Install liber on Linux from source, on Arch Linux, on NixOS, or via
 
 import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
 
-Optional features need `fzf` (live search), an archiver (`single-file-cli` or [monolith](https://github.com/y2z/monolith); the built-in `native` backend needs nothing), and `git` (history and sync). liber itself has no runtime dependencies.
+All dependencies are optional but are nice to have. However fall back options are available in case they are not installed 
+- [fzf](https://github.com/junegunn/fzf) for cli live search
+- [single-file-cli](https://github.com/gildas-lormeau/single-file-cli)for full web archives (including javascript content)
+	- alternatively instead of single-file-cli, [monolith](https://github.com/y2z/monolith) can be used as well 
+- `git` for history and git based syncing
 
 <Tabs>
 <TabItem label="From source">
@@ -27,10 +31,24 @@ make && sudo make install
 </TabItem>
 <TabItem label="Arch Linux">
 
-Install the optional dependencies above, then:
+Install the optional dependencies:
+
+```sh
+sudo pacman -S fzf
+paru -S single-file-cli # or use your own method of installing packages from aur
+```
+
+To install the binary package:
 
 ```sh
 wget https://github.com/liber-bkm/liber/releases/latest/download/PKGBUILD
+makepkg -si
+```
+
+To install the package from latest git branch:
+```sh
+https://github.com/liberbkm/liber/releases/latest/download/PKGBUILD-git
+mv PKGBUILD-git PKGBUILD
 makepkg -si
 ```
 
@@ -51,7 +69,7 @@ Then install with `environment.systemPackages` or home-manager `home.packages`:
 ```nix
 { config, pkgs, inputs, ... }: {
   home.packages = [
-    inputs.liber.packages.${pkgs.system}.default
+    inputs.liber.packages.${stdenv.hostPlatform.system}.default
   ];
 }
 ```
@@ -59,20 +77,14 @@ Then install with `environment.systemPackages` or home-manager `home.packages`:
 Or try it without installing:
 
 ```sh
-nix shell github:liber-bkm/liber
-nix run github:liber-bkm/liber
+nix shell github:liber-bkm/liber # enter shell with liber installed
+# OR
+nix run github:liber-bkm/liber # run liber commands directly 
 ```
-
-:::note
-Nix and Arch builds don't ship optional dependencies. Install `fzf` and an archiver (`single-file-cli` or `monolith`) separately.
-:::
 
 </TabItem>
 <TabItem label="Generic Linux">
 
-:::caution
-If you're not on Arch Linux or NixOS, building from source (first tab) is the better option: it takes a minute with Go 1.22 or later and guarantees the binary matches your system. Use the generic binary below only if you specifically want a prebuilt one.
-:::
 
 Download the binary from [latest releases](https://github.com/liber-bkm/liber/releases/latest) and place it in your `PATH`:
 

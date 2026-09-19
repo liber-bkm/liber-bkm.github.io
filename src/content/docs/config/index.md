@@ -40,6 +40,7 @@ $XDG_CONFIG_HOME/liber/config.json    # usually ~/.config/liber/config.json
 | `monolith_use_browser` + `monolith_browser_path` | When `monolith_use_browser` is `true`, liber renders the page with a headless chromium-family browser (`monolith_browser_path`, else `chromium` / `chromium-browser` / `google-chrome` from `PATH`) and pipes the DOM into monolith, archiving even JavaScript-rendered pages without a full single-file setup. |
 | `browser_cmd` | Override open command (default `xdg-open` / `open` / Windows handler). |
 | `device_id` | Per-device id used in journal filenames (generated on first write; change with `liber config set device_id <name>`). |
+| `auth_token` | Token required by `liber --serve` (browser login at `/login`, bearer for scripts). Settable with `liber config set auth_token <secret>`; the file stays owner-only and `liber config` never prints the value. See [Securing the web UI](/guide/web-ui/#securing-the-web-ui). |
 | `editor_cmd` | Override markdown open command (default `$VISUAL`, then `$EDITOR`, then OS default). |
 
 ```sh
@@ -54,6 +55,8 @@ liber config set base_dir ~/Other-Bookmarks
 ```
 
 Keys are validated before writing (`archive_backend` must be one of the four backends, `monolith_use_browser` a bool).
+
+`LIBER_CONFIG` and `LIBER_BASE_DIR` env vars override the config file path and `base_dir` respectively (used by wrappers and on platforms without a home directory, e.g. Android).
 
 :::caution
 If archiving silently does nothing, check dependencies and that `singlefile_browser_path` or the `monolith` options are set properly in `config.json`.

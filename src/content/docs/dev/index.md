@@ -24,4 +24,8 @@ Three principles explain most design decisions in the codebase:
 | [Profiles and sync](/dev/profiles-sync/) | `effectiveBaseDir`, repo discovery | `config.go`, `profile.go`, `sync.go` |
 | [Web UI and export](/dev/webui/) | Templates, reuse of CLI machinery, concurrency, pagination, static export | `webui.go`, `render.go`, `export_site.go` |
 | [Link health check](/dev/link-health/) | Worker pool, classification, check stamps, quarantine | `check.go`, `store.go` |
+| [JSON API](/dev/api/) | Bookmarks, tags, rules, profiles, check, settings, library endpoints | `api.go` |
+| [Android internals](/dev/android/) | Wrapper architecture, build, storage, theme, distribution | `android/`, `config.go`, `dns.go` |
+| [Web auth](/dev/web-auth/) | Token resolution, browser cookies, API bearers | `auth.go`, `webui.go` |
+| [Performance budgets](/dev/performance/) | Pinned scaling behavior and fix order | `perf_test.go` |
 

@@ -13,7 +13,7 @@ liber --serve --addr 127.0.0.1:8181
 Starts a local UI at `http://127.0.0.1:8080` for search, add, edit, and delete. It reflects the active profile and picks up CLI profile switches on the next request, so no restart is needed. Past 500 results, `?page=N` pagination appears; page links preserve the active scope/deep query.
 
 :::caution
-Binds to loopback by default and has no authentication, so anyone who can reach it can read and modify the collection. Binding elsewhere prints a warning.
+Binds to loopback by default. Without a token, anyone who can reach the server has full read/add/edit/delete access, which is why loopback is the default and other addresses print a warning. See [Securing the web UI](#securing-the-web-ui) before exposing it.
 :::
 
 ## Settings page
@@ -34,6 +34,7 @@ All changes write to `config.json` (or the rules in `index.json`) immediately; t
 The settings page also covers tasks that mirror CLI commands:
 
 - **Import.** Upload a browser bookmark export file. Same duplicate skipping as `liber --import`. See [Importing](/guide/import/).
+- **Portable export.** Download the whole collection as a browser bookmark export (same Netscape format as `--export-bookmarks`), the recommended portable backup.
 - **Static export.** Same as `liber --export-site`, defaulting to `<base_dir>/site`. See [Static site export](/guide/static-export/).
 - **Sync.** Commit the collection with jj or git, with optional push. Same as `liber --sync`. See [Sync](/guide/sync/).
 - **Link health.** The `/check` page uses the same moved, dead, and uncertain buckets plus per item update, delete, and quarantine actions as `liber --check`. See [Link health](/guide/link-health/).
@@ -50,6 +51,22 @@ The settings page also covers tasks that mirror CLI commands:
 - Search rows have checkboxes for bulk delete (with confirm), bulk tag set, and bulk folder move.
 - The add form accepts an optional title. When left empty the title is fetched the same way as on the CLI.
 - The edit form removes attachments by name as well as by checkbox.
+
+## Securing the web UI
+
+```sh
+liber --serve --auth-token <secret>   # require a token (browser login at /login)
+LIBER_AUTH_TOKEN=<secret> liber --serve --addr 0.0.0.0:8080
+liber config set auth_token <secret>  # same, stored in config.json (file is owner-only)
+```
+
+Without a token, anyone who can reach the server has full read/add/edit/delete access. With a token, browsers log in once at `/login` (cookie plus origin-checked POSTs, `/logout` to leave) and scripts send `Authorization: Bearer <token>`, computed as HMAC-SHA256 of your token over the string `liber-bearer-v1`, hex-encoded:
+
+```sh
+python3 -c "import hmac, hashlib; print(hmac.new(b'<secret>', b'liber-bearer-v1', hashlib.sha256).hexdigest())"
+```
+
+The active token resolves flag, then env, then the `auth_token` config key; the config file is owner-only and `liber config` never prints the value. Locked out? Remove the flag/env/key (or the `auth_token` line) with file access and restart on loopback. Prefer a reverse proxy with TLS or a VPN in front for anything beyond a trusted LAN, since the token travels in the clear over plain HTTP. See [Self-hosting](/guide/self-hosting/) and [Web auth internals](/dev/web-auth/).
 
 ## Bookmarklet
 

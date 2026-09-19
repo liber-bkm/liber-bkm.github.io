@@ -1,0 +1,20 @@
+---
+title: Install on Android
+description: Install the liber Android app from the release APK.
+---
+
+import { LinkButton } from '@astrojs/starlight/components';
+
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest" icon="download">Get the Android APK</LinkButton>
+
+1. Download the APK from the [latest releases](https://github.com/liber-bkm/liber/releases/latest): `liber-android-debug.apk` for personal use, or `liber-android.apk` once a signed build is published.
+2. Transfer it to your phone and open it to install. Your Android version may ask you to allow installs from that source first.
+3. On first launch, choose how the app should run:
+   - **Standalone (on this device)** keeps everything on the phone. Pick this unless you run liber on a computer too.
+   - **Connect to a server** talks to liber on your desktop over your local network. Enter its LAN address (and the auth token, if that server requires one).
+
+Your bookmarks, tags, notes, and saved pages live on the device and work offline. No account, no cloud, no background services. Continue with the [Android guide](/guide/android/) for usage.
+
+:::caution
+The collection lives in app-private storage, which Android deletes with the app. Before uninstalling or wiping the phone, share an export to somewhere safe (settings, Library) so you can import it back afterward.
+:::

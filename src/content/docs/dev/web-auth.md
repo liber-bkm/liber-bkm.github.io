@@ -1,0 +1,6 @@
+---
+title: Web auth internals
+description: Token resolution, browser cookie flow, and API bearer auth.
+---
+
+`auth.go` holds the whole scheme; `webui.go` contributes `newWebMux(token)` and the `--auth-token`/`LIBER_AUTH_TOKEN` plumbing in `runServe`. Empty token means fully open (historic behavior); non-empty gates every route through `withAuth`, including future `/api/*` routes, with `/login` and `/logout` exempt. Browsers use an HMAC-signed cookie (`liber-cookie-v1` domain) plus Origin/Referer matching on state-changing methods instead of per-form CSRF tokens, which keeps every existing template untouched; requests carrying no Origin/Referer (curl) pass the check by design. API clients use `Authorization: Bearer <hex(HMAC(token, "liber-bearer-v1"))>`, verified with constant-time comparison, and skip origin checks. Login compares the raw token constant-time and rejects empty submissions; `next` is constrained to local paths. There is deliberately no session store, no user model, and no TLS in liber itself (terminate at a proxy or ride a VPN). The active token resolves flag-over-env-over-`auth_token`-key via `resolveAuthToken`; the key is settable with `liber config set auth_token`, the file is always written owner-only with older copies tightened on save, and `liber config` prints `set` instead of the value.

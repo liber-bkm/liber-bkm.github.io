@@ -4,6 +4,7 @@ dist/
 .nix-pnpm/
 .nix-npm-cache/
 .nix-cache/
+/local
 
 # logs
 npm-debug.log*

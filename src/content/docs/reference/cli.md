@@ -1,6 +1,6 @@
 ---
 title: CLI reference
-description: Complete liber command and flag reference (v0.7.1).
+description: Complete liber command and flag reference (v0.9.2).
 ---
 
 Source of truth is `liber --help` / bare `liber`. This page mirrors it for search and copy-paste.
@@ -73,6 +73,9 @@ Usage:
                                    (see "Sync")
   liber --import <path>          import a browser bookmark export (Netscape HTML format)
   liber --import <path> -md -a   same, also generating markdown/archives for each (slow)
+  liber --export-bookmarks <path>
+                                 write the collection as a browser bookmark export
+                                 (Netscape HTML format, re-importable)
   liber --tags                   list all tags with counts
   liber --tags rename <a> <b>    rename a tag everywhere (renaming onto an existing
                                   tag merges into it -- no separate merge command)
@@ -119,6 +122,10 @@ Usage:
   liber --serve --addr <host:port>
                                    use a different address (non-loopback prints a warning:
                                    it exposes read/add/edit/delete access, no login)
+  liber --serve --auth-token <tok>
+                                   require a token: browser login at /login,
+                                   API clients send Authorization: Bearer
+                                   (or set LIBER_AUTH_TOKEN instead of the flag)
   liber --export-site [dir]      write a static, browsable index.html of the whole
                                    collection (default <base_dir>/site); links point at
                                    your existing html/markdown/archive/attachment files

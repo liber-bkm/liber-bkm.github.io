@@ -23,7 +23,10 @@ export default defineConfig({
       sidebar: [
         {
           label: 'Start',
-          items: [{ label: 'Quickstart', slug: 'start/quickstart' }],
+          items: [
+            { label: 'Quickstart', slug: 'start/quickstart' },
+            { label: 'Documentation index', slug: 'documentation' },
+          ],
         },
         {
           label: 'Install',
@@ -31,6 +34,7 @@ export default defineConfig({
             { label: 'Linux', slug: 'install/linux' },
             { label: 'macOS', slug: 'install/macos' },
             { label: 'Windows', slug: 'install/windows' },
+            { label: 'Android', slug: 'install/android' },
           ],
         },
         {
@@ -41,13 +45,15 @@ export default defineConfig({
             { label: 'Editing and deleting', slug: 'guide/editing' },
             { label: 'Attachments', slug: 'guide/attachments' },
             { label: 'Tags and folders', slug: 'guide/tags-folders' },
-            { label: 'Importing', slug: 'guide/import' },
+            { label: 'Importing and exporting', slug: 'guide/import' },
             { label: 'Automation', slug: 'guide/automation' },
             { label: 'Sync', slug: 'guide/sync' },
             { label: 'Profiles', slug: 'guide/profiles' },
             { label: 'Web UI', slug: 'guide/web-ui' },
             { label: 'Static site export', slug: 'guide/static-export' },
             { label: 'Link health', slug: 'guide/link-health' },
+            { label: 'Android app', slug: 'guide/android' },
+            { label: 'Self-hosting', slug: 'guide/self-hosting' },
             { label: 'Shell completions', slug: 'guide/completions' },
           ],
         },
@@ -62,7 +68,11 @@ export default defineConfig({
         },
         {
           label: 'Concepts',
-          items: [{ label: 'Design notes', slug: 'concepts/design-notes' }],
+          items: [
+            { label: 'Design notes', slug: 'concepts/design-notes' },
+            //{ label: 'Tags and Directories', slug: 'concepts/tags-and-directories'},
+
+          ],
         },
         {
           label: 'Reference',
@@ -83,6 +93,10 @@ export default defineConfig({
             { label: 'Profiles and sync', slug: 'dev/profiles-sync' },
             { label: 'Web UI and export', slug: 'dev/webui' },
             { label: 'Link health check', slug: 'dev/link-health' },
+            { label: 'JSON API', slug: 'dev/api' },
+            { label: 'Android internals', slug: 'dev/android' },
+            { label: 'Web auth', slug: 'dev/web-auth' },
+            { label: 'Performance budgets', slug: 'dev/performance' },
           ],
         },
       ],

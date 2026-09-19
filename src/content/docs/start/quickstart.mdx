@@ -32,6 +32,11 @@ The built-in `native` archive backend needs nothing at all.
 
     <LinkButton href="/install/windows/" icon="document">Windows install</LinkButton>
   </Card>
+  <Card title="Android" icon="mobile-android">
+    Native app, standalone or server-connected.
+
+    <LinkButton href="/install/android/" icon="document">Android install</LinkButton>
+  </Card>
 </CardGrid>
 
 ## 2. Basics
@@ -56,7 +61,24 @@ liber config                   # show config file and bookmark locations
 
 Flags combine freely, e.g. `liber <url> -i -t news reading -f articles -md -a`.
 
-## 3. Bird's-eye view
+## 3. Features 
+
+- Plain HTML bookmarks
+- Web page archives, markdown notes and file attachments 
+- Tags and directories 
+- Fully functional CLI and webUI
+- Duplicate detection 
+- Link checker (checks for stale or outdated bookmarks)
+- Powerful search: search through specific tags, directories or within the contents of archived bookmarks 
+- Configurable bookmark directories and paths
+- Import and Export bookmarks 
+- Automation rules to classify bookmarks into specific tags or folder 
+- Self hosting friendly
+- Sync friendly
+- Merge conflict resolutions in case of personal sync services without relying on self hosting 
+- Profiles 
+
+## 4. Bird's-eye view
 
 Every command in one place (details live under [Guide](/guide/adding/) and [Reference](/reference/cli/)):
 
@@ -105,6 +127,8 @@ liber -r --merge --all         same, merging every .liber json candidate
 liber -r --prune-journal       delete applied journal files older than 90 days
 liber --import <path>          import a browser bookmark export (see "Import")
 liber --import <path> -md -a   same, also generating markdown/archives for each (slow)
+liber --export-bookmarks <path>
+                               write the collection as a re-importable export
 liber --tags / --folders       list tags/folders with counts (see "Tag and folder hygiene")
 liber --tags rename <a> <b>    rename a tag everywhere (merges if <b> already exists)
 liber --tags delete <tag>      remove a tag from every bookmark that has it
@@ -131,6 +155,8 @@ liber -v                       print the version
 liber --serve                  local web UI for search + add (see "Web UI")
 liber --serve --addr <host:port>
                                use a different address (default 127.0.0.1:8080)
+liber --serve --auth-token <tok>
+                               require a token (browser login, bearer for scripts)
 liber --export-site            export to a static html
 liber --export-site <path>     export to a specific path
 ```
