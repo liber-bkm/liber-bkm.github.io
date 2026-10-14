@@ -42,6 +42,10 @@ export default defineConfig({
       title: 'liber',
       description:
         'A local first bookmark manager: CLI plus web UI plus desktop and mobile. Plain-text bookmark files with powerful search, tags and folders, offline archives, notes, and attachments.',
+      logo: {
+        src: './src/assets/logo.svg',
+        alt: 'liber logo',
+      },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/liber-bkm/liber' },
       ],

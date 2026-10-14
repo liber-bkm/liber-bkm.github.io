@@ -14,7 +14,7 @@ pnpm preview  # serve dist/ at http://127.0.0.1:4321
 
 ## Pages
 
-- `/`: hero + Features cards + Download (direct per-platform links) + GitHub link
+- `/`: hero with logo image + heading-less demo previews + Features cards + Download (direct per-platform links) + GitHub link. Nav logo, hero image, and favicon derive from `../assets/logo.svg`.
 - `/documentation/`: index of every site page, linked from the homepage Documentation button
 - `/install/linux/`, `/install/macos/`, `/install/windows/`, `/install/android/`: install guides
 - `/start/quickstart/`: install heads-up, capture loop, search syntax, full command overview
