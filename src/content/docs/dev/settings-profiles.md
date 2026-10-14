@@ -26,7 +26,7 @@ New frontends implement against this table: same core functions, same endpoint s
 
 ## UI preferences and layout
 
-View preferences that differ per device (archive inline versus new tab, theme, density) live in `localStorage` under `liber-*` keys, never on the server. Below the `md` breakpoint the sidebar becomes a hamburger slide-over rendering the same sidebar fragment (nav, filters, theme toggle), so the two can never drift; landscape and wider keep the static sidebar. The viewport uses `viewport-fit=cover` and every top-anchored surface pads with safe-area insets via `max(base, inset)` so desktop spacing is unchanged.
+View preferences that differ per device (archive inline versus new tab, theme, density) live in `localStorage` under `liber-*` keys, never on the server. Density is a `data-density` attribute on the document root set by a context mirroring the theme provider; compact overrides live centrally in `index.css` on `lib-card`/`lib-row`/`lib-section` hooks so no component takes density props. Below the `md` breakpoint the sidebar becomes a hamburger slide-over rendering the same sidebar fragment (nav, filters, theme toggle), so the two can never drift; landscape and wider keep the static sidebar. The viewport uses `viewport-fit=cover` and every top-anchored surface pads with safe-area insets via `max(base, inset)` so desktop spacing is unchanged.
 
 ## Library virtualization
 

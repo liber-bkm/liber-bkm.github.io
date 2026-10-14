@@ -29,4 +29,4 @@ pnpm preview  # serve dist/ at http://127.0.0.1:4321
 
 ## Sources
 
-Single source of truth lives one level up (`../`): `developer-docs.md` (maintainer internals, updated in place) plus standalone notes added during the project (`attachments-tab-about.md`, `check-workers-save-as.md`, `cli-status-deep-preset.md`, `empty-library-checklist.md`, `sync-exchange-apps.md`). New CLI/API surface is verified read-only against the Rust project at `project-liber/` (never build it).
+Single source of truth lives one level up (`../`): `developer-docs.md` (maintainer internals, updated in place) plus standalone notes added during the project (`compact-density.md`, `portrait-layout.md`).

@@ -16,7 +16,7 @@ description: Library, detail drawer, bulk actions, rules, check center, and sett
 - **Token login page**; 401s redirect with `next` preserved.
 - **Detail content tabs**: notes editor, archive viewer (inline or new tab), attachment upload.
 
-View preferences that differ per device (archive inline versus new tab, theme, density) live in `localStorage` under `liber-*` keys, never on the server.
+View preferences that differ per device (archive inline versus new tab, theme, density with Comfortable and Compact layouts) live in `localStorage` under `liber-*` keys, never on the server. On narrow portrait screens the Library, check, and rules headers flow onto two rows instead of pushing controls off screen, so the Deep toggle, save button, worker count, and rule actions stay reachable without sideways scrolling; the same wrapping applies to narrow desktop windows.
 
 Task flows: [Adding](/app/adding/), [Finding](/app/finding/), [Organizing](/app/organizing/), [Check center](/app/check-center/), [Library settings](/app/library-settings/). The [Desktop app](/app/desktop/) runs this same UI offline over IPC.
 

@@ -13,6 +13,7 @@ Settings on every graphical frontend (web settings page, desktop settings, Andro
 - **Sync exchange**: **Export bundle** downloads the pending changes as a file; carry it to the other device and **Import bundle** there to merge them in, with a notice reporting inserted, merged, deduped, deleted, and skipped counts. Replaying is idempotent, so importing the same file twice is safe. In remote mode the exchange runs against the server library instead of the local one. Direct device-to-server push and pull stay on the command line. See [Sync](/cli/sync/).
 - **Backup and restore**: download button plus armed restore with a size note. See [Backup and restore](/config/backup-restore/).
 - **Site icons**: refresh missing icons or re-fetch cached ones (icons cache with day-long headers; reload the library view after).
+- **Appearance**: two layouts, Comfortable and Compact. Compact tightens the spacing of cards, table rows, and settings sections so more fits on small screens; text sizes stay the same for readability. Comfortable renders exactly as before and is the default. The choice lives on the device only, like the theme.
 - **Remote fields** (mobile and desktop): server URL plus token for remote mode. See [Pairing](/app/pairing/).
 
 `GET settings` also reports `maintenance_status` (bookmark, oplog, quarantine, and short-id gap counts) plus `version` (the daemon release). `auth_token` is never shown or set here; it stays CLI and env only.
