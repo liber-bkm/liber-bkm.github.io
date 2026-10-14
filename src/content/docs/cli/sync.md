@@ -3,7 +3,7 @@ title: Syncing across devices
 description: Folder sync plus bundle exchange, HTTP push and pull, and git snapshots.
 ---
 
-Sync has no GUI: it stays CLI plus API only. Devices share the base dir over any folder sync (Syncthing, Nextcloud, Drive, plain rsync) plus explicit bundle exchange. Merging is by UUID: newer `updated_at` wins scalars, tags and attachments union, tombstones lose to newer edits, and replay is idempotent, so bundles can be exchanged freely in both directions. Short numeric ids stay local: every import heals gaps and collisions into dense `1..N` in creation order, so converged devices agree on the mapping.
+Devices share the base dir over any folder sync (Syncthing, Nextcloud, Drive, plain rsync) plus explicit bundle exchange. Merging is by UUID: newer `updated_at` wins scalars, tags and attachments union, tombstones lose to newer edits, and replay is idempotent, so bundles can be exchanged freely in both directions. Short numeric ids stay local: every import heals gaps and collisions into dense `1..N` in creation order, so converged devices agree on the mapping.
 
 ## Bundle exchange
 
@@ -11,6 +11,8 @@ Sync has no GUI: it stays CLI plus API only. Devices share the base dir over any
 liber sync export /tmp/bundle.json   # on device A, transfer the file
 liber sync import /tmp/bundle.json   # on device B, merges with UUID semantics
 ```
+
+Settings has the same exchange with buttons: **Export bundle** downloads the pending changes as a file, **Import bundle** merges them in with a notice reporting inserted, merged, deduped, deleted, and skipped counts. See [Library settings](/app/library-settings/).
 
 ## HTTP transport
 

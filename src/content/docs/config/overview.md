@@ -38,11 +38,11 @@ One shared allowlist covers every writer (`liber config set`, the Settings form,
 | `singlefile_cmd`, `singlefile_browser_path`, `monolith_cmd` | External archiver commands. | bundled PATH entries under Nix |
 | `auth_token` | CLI and env only, never returned or set over the API: a bearer that could mint itself is no auth at all. Never shown in Settings or API responses. | empty (open) |
 
-`GET /api/v2/settings` also reports `maintenance_status` (bookmark, oplog, quarantine, and short-id gap counts). Dir keys accept non-empty paths with `~` expansion, and unsetting goes through the config file since the API rejects empties.
+`GET /api/v2/settings` also reports `maintenance_status` (bookmark, oplog, quarantine, and short-id gap counts) plus `version` (the daemon release; the frontend version is separate, see About in Settings). Dir keys accept non-empty paths with `~` expansion, and unsetting goes through the config file since the API rejects empties. `liber status` prints the same health in the terminal; see [CLI reference](/reference/cli/).
 
 ## Saved searches
 
-Named `query plus scope plus sort` presets live in the config file as device-local UI state, never synced. Manage them with `liber searches`, the API `/api/v2/searches`, or the sidebar section; see [Searching](/cli/searching/).
+Named `query plus scope plus sort` presets live in the config file as device-local UI state, never synced. Presets can also store the Deep toggle (`searches add <name> --deep`); `run` and the sidebar apply it with a deep badge. Manage them with `liber searches`, the API `/api/v2/searches`, or the sidebar section; see [Searching](/cli/searching/).
 
 ## Daemon config is live
 

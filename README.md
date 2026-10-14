@@ -29,4 +29,4 @@ pnpm preview  # serve dist/ at http://127.0.0.1:4321
 
 ## Sources
 
-Single source of truth lives one level up (`../`), copied from the Rust project (`project-liber/` docs): `README.md` (full user docs, v0.11.0), `developer-docs.md` (maintainer internals), plus `changelog.md` (history), `WINDOWS.md` (packaging notes). The prebuilt binary at `project-liber/result/bin/liber` backs `reference/cli.md` (`--help` per subcommand, no compilation needed) and `project-liber/openapi.json` backs `reference/api.md`.
+Single source of truth lives one level up (`../`): `developer-docs.md` (maintainer internals, updated in place) plus standalone notes added during the project (`attachments-tab-about.md`, `check-workers-save-as.md`, `cli-status-deep-preset.md`, `empty-library-checklist.md`, `sync-exchange-apps.md`). New CLI/API surface is verified read-only against the Rust project at `project-liber/` (never build it).

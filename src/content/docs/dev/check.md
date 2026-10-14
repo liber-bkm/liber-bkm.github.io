@@ -3,7 +3,7 @@ title: Link check internals
 description: Classification, stale durations, apply flow, and the DNS decision.
 ---
 
-HEAD first with manual redirects, dead means 404/410 only, 301/308 always report moved with a resolved target, cross-host redirects are uncertain, 405/501 falls back to GET. Scans run on a thread pool with a worker cap; stamps write check time plus status with no oplog entry, same as history.
+HEAD first with manual redirects, dead means 404/410 only, 301/308 always report moved with a resolved target, cross-host redirects are uncertain, 405/501 falls back to GET. Scans run on a thread pool with a worker cap shared by every frontend: CLI `--workers` (default 12), the API `RunBody.workers`, and Tauri `check_run` all feed the same cap, and the check center exposes it as an optional count field (empty means the default). Stamps write check time plus status with no oplog entry, same as history.
 
 ## No third-party DNS fallback, deliberately
 

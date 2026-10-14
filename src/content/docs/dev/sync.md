@@ -13,6 +13,10 @@ References, not bytes. Binaries ride folder sync like all other content; the opl
 
 `POST /api/v2/sync/commit {push?}` runs the same `git_snapshot` as `liber sync commit` on the live-config profile dir with a server-stamped `liber sync: <utc>` message (the CLI keeps its own `--message` default). The endpoint always answers HTTP 200 with `{output, error?}` and runs git in `spawn_blocking` since `Command` blocks. Tauri `sync_commit` returns the same shape as a sync command (no lock held across await, the snapshot is local and fast). The Settings snapshot button posts through the `useRemote()` branch, so remote mode commits the server library. The `git_snapshot` nothing-to-commit probe reads combined stdout plus stderr: newer git reports it on stdout and a stderr-only check misread empty repos as failures.
 
+## Bundle exchange in the apps
+
+Bundle exchange lives in the apps through Tauri `sync_export` (entries plus count) and `sync_import` (bundle text in, merge report out, write-locked) with `useRemote()` REST branches, surfaced as the Settings Sync exchange section (file download plus file import). Push/pull stay CLI-only since they need explicit peer addressing.
+
 ## Scripting pick
 
 `GET /api/v2/pick?q=` answers `text/plain`: 400 on a missing query, 404 on no match, a single URL line on one match, else up to 30 `[id] title` plus URL rows. Row ids reuse the display alias (`short_id`, falling back to the 8-char UUID prefix like the TUI), so every row resolves through the normal id path. There is no Tauri pick command: scripting has no use-case on device.

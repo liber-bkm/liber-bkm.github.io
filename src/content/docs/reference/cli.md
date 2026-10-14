@@ -28,6 +28,7 @@ Commands:
   archive        Archive a page
   attachments    List attachments
   sync           Bundle exchange, HTTP push/pull, snapshots, prune
+  status         Library health in the terminal
   searches       Saved search presets
   config         Get, set, list configuration
   pick           Fuzzy TUI picker
@@ -214,13 +215,21 @@ Usage: liber sync (export <FILE> [--since N] | import <FILE> | commit [--message
 
 Bundle exchange between devices, git snapshots (never inits a repo), HTTP push/pull against `liber-serve`, oplog prune (default 90 days). `--since` filters by oplog sequence; a clean tree reports nothing-to-commit in the body.
 
+## status
+
+```text
+Usage: liber status
+```
+
+Prints the same library health the Settings page shows: device and active profile, bookmark, oplog, quarantine, and short-id gap counts, plus hints (review quarantine, close id gaps with reindex, or a clean bill of health). Takes no flags.
+
 ## searches
 
 ```text
-Usage: liber searches ([list] | add <NAME> [--query Q] [--scope FIELDS] [--sort MODE] | delete <NAME> | run <NAME>)
+Usage: liber searches ([list] | add <NAME> [--query Q] [--scope FIELDS] [--sort MODE] [--deep] | delete <NAME> | run <NAME>)
 ```
 
-Saved search presets. `run` lists through the normal search path. Adds upsert case-insensitively; names cap at 64 chars; scope and sort validate against the same parsers as `list`. See [Searching](/cli/searching/).
+Saved search presets. `run` lists through the normal search path. Adds upsert case-insensitively; names cap at 64 chars; scope and sort validate against the same parsers as `list`. `--deep` stores the Deep toggle with the preset; `run` and the sidebar apply it like any other filter. See [Searching](/cli/searching/).
 
 ## config
 

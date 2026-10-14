@@ -3,7 +3,7 @@ title: Settings and profiles
 description: Setting allowlist, maintenance status, tracked profiles, and the frontend matrix.
 ---
 
-One allowlist for every writer: `config::API_SETTABLE` plus `validate_setting_value` plus `apply_setting` in core, called by the CLI (`config set`, with `auth_token` as the one CLI-only extra), the API `PUT settings`, and Tauri `set_setting`. Dir keys accept non-empty paths (`~` expands at read time); an unset dir means the profile default, and unsetting goes through the config file since the API rejects empties. Changing a directory switches it live with no file moves, so the UI warns to move files first and `reindex` after; `Store::open` lazily creates an empty library in a fresh dir. `auth_token` is CLI and env only, never returned or set over the API: a bearer that could mint itself is no auth at all. `GET settings` adds `maintenance_status` (`Store::maintenance_status`: bookmark, oplog, quarantine, and short-id gap counts from single `COUNT` queries), the read model for the future `sync status`.
+One allowlist for every writer: `config::API_SETTABLE` plus `validate_setting_value` plus `apply_setting` in core, called by the CLI (`config set`, with `auth_token` as the one CLI-only extra), the API `PUT settings`, and Tauri `set_setting`. Dir keys accept non-empty paths (`~` expands at read time); an unset dir means the profile default, and unsetting goes through the config file since the API rejects empties. Changing a directory switches it live with no file moves, so the UI warns to move files first and `reindex` after; `Store::open` lazily creates an empty library in a fresh dir. `auth_token` is CLI and env only, never returned or set over the API: a bearer that could mint itself is no auth at all. `GET settings` adds `maintenance_status` (`Store::maintenance_status`: bookmark, oplog, quarantine, and short-id gap counts from single `COUNT` queries) plus `version` (the daemon's `CARGO_PKG_VERSION` on both daemons). `liber status` prints the same health with matching hint text. The frontend version is baked at build time from `package.json` via `__APP_VERSION__` in both vite configs (vitest has its own config, so it needs its own define); the Settings About section shows both so remote skew is visible.
 
 ## Profiles
 
@@ -18,11 +18,11 @@ Every artifact action runs through one core function, whichever frontend trigger
 | Edit fields | `apply_edit` | `edit` flags | edit form | edit form | `PUT bookmarks/:id` |
 | Markdown add/remove | `MarkdownAction` | `--markdown` (add) | toggle | start/remove controls | `PUT`/`DELETE notes` |
 | Archive add/remove | `ArchiveAction` | `archive` cmd, `--archive` | toggle plus backend cycle | archive section plus backend select | `POST`/`DELETE archive` |
-| Attach/detach | `attach` fns | `--attach/--detach`, `attachments` | prompt flows | upload plus per-file remove | `POST`/`DELETE attachments` |
+| Attach/detach | `attach` fns | `--attach/--detach`, `attachments` | prompt flows | Attachments tab plus edit-form upload, per-file open and remove | `POST`/`DELETE attachments` |
 | Open | `record_open` | `open`, pick menu | pick menu | open button | `POST open` |
 | Delete | `delete_bookmark_with_files` | `delete --yes` | n/a (command exists) | two-step confirm | confirm-gated `DELETE` |
 
-New frontends implement against this table: same core functions, same endpoint shapes. Tauri covers every row over IPC via `frontend/src/tauri.ts` (same shapes as the API column, file downloads via blob URLs, archive viewing via `srcDoc`), so the Web UI column doubles as the Tauri column.
+New frontends implement against this table: same core functions, same endpoint shapes. Tauri covers every row over IPC via `frontend/src/tauri.ts` (same shapes as the API column, file downloads via blob URLs, archive viewing via `srcDoc`), so the Web UI column doubles as the Tauri column. Attachment open branching is `!isTauri() || useRemote()` everywhere: remote mode must use the remote download URL even inside the Tauri shell, or opens fail against the empty local library.
 
 ## UI preferences and layout
 

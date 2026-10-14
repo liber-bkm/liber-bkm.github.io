@@ -32,7 +32,7 @@ liber searches run daily     # lists through the normal search path
 liber searches delete daily
 ```
 
-Adds upsert case-insensitively; names cap at 64 chars; scope and sort validate against the same parsers as `list`. Presets are device-local UI state stored in the config file, never synced.
+Adds upsert case-insensitively; names cap at 64 chars; scope and sort validate against the same parsers as `list`. Presets are device-local UI state stored in the config file, never synced. Presets can store the Deep toggle too (`searches add <name> --deep`, or tick Deep before saving in the Library); `run` and the sidebar apply it along with query, scope, and sort, and deep presets show a small deep badge in the sidebar. Old presets without the flag apply shallow, as before.
 
 ## Open
 

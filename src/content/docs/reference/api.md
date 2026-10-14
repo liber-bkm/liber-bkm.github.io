@@ -47,7 +47,7 @@ JSON API under `/api/v2` (a checked-in `openapi.json` contract in the project pi
 | `POST /api/v2/reindex` | Repair with prune and compact options |
 | `GET /api/v2/history` | Recently opened with open counts |
 | `GET /api/v2/profiles`, `POST /api/v2/profiles/switch`, `POST /api/v2/profiles/delete` | Profile list, switch, delete |
-| `GET /api/v2/settings`, `PUT /api/v2/settings` | Settings plus `maintenance_status` (`auth_token` never returned or set here) |
+| `GET /api/v2/settings`, `PUT /api/v2/settings` | Settings plus `maintenance_status` and daemon `version` (`auth_token` never returned or set here) |
 | `GET+POST /api/v2/searches`, `POST /api/v2/searches/delete` | Saved search presets (device-local, never synced) |
 
 `GET /login` and `POST /login` serve the token login page, `GET /logout` clears it. See [Self-hosting](/config/self-hosting/) for serving and [Auth internals](/dev/auth/) for the token mechanics.

@@ -5,7 +5,7 @@ description: Library, detail drawer, bulk actions, rules, check center, and sett
 
 `liber serve` prints a localhost and LAN address; open it in a browser. Release and Nix builds serve the UI embedded with zero flags; dev builds serve API-only unless given `--static-dir` (see [Building from source](/dev/building/)).
 
-- **Library** with instant search (`field:value` prefixes plus field selector, Deep toggle with match snippets), site icons, sort, card and table views with windowed rendering for large libraries, dark mode, and a phone layout with drawer navigation.
+- **Library** with instant search (`field:value` prefixes plus field selector, Deep toggle with match snippets), site icons, sort, card and table views with windowed rendering for large libraries, dark mode, and a phone layout with drawer navigation. A fresh library greets you with a short checklist instead of an empty page: add your first bookmark (opens the add dialog), import or settings (browser import, profiles, archive backend picker), and a tip pointing at the bookmarklet. It shows only when the library is truly empty with no search or filters active, so it never interrupts triage.
 - **Detail drawer** with inline edit, two-step delete, attachments, and history.
 - **Add dialog** with live duplicate detection ("add anyway" or open existing) plus optional notes, archived copy, and attachments at creation.
 - **Bulk bar**: multi-select delete (confirmed), set tags, move folder.
