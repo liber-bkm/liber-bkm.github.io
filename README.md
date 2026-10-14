@@ -1,6 +1,6 @@
 # liber-docs
 
-Minimal Astro + Starlight docs site for `liber`. Deploys to https://liber-bkm.github.io via GitHub Pages.
+Astro + Starlight docs site for `liber` (Rust rewrite). Deploys to https://liber-bkm.github.io via GitHub Pages. Default Starlight theme, no custom theme CSS.
 
 ## Dev (NixOS, no root)
 
@@ -14,21 +14,19 @@ pnpm preview  # serve dist/ at http://127.0.0.1:4321
 
 ## Pages
 
-- `/`: description + preview GIFs + Download (Linux, macOS, Windows, Android) + GitHub link
+- `/`: hero + Features cards + Download (direct per-platform links) + GitHub link
 - `/documentation/`: index of every site page, linked from the homepage Documentation button
 - `/install/linux/`, `/install/macos/`, `/install/windows/`, `/install/android/`: install guides
-- `/start/quickstart/`: install heads-up, basics, and full command overview
-- `/guide/*`: adding, searching, editing, attachments, tags-folders, import/export, automation, sync, profiles, web-ui, static-export, link-health, android, self-hosting, completions (from `docs.md` + `Project-readme.md` + `self-hosting.md` + `android-readme.md`)
-- `/config/`, `/config/layout/`, `/config/reindex/`, `/config/archive-backends/`: configuration reference
-- `/concepts/design-notes/`: why tags+folders, markdown, no database
-- `/reference/cli/`: full `liber --help` mirror (v0.9.2)
-- `/dev/*`: internals (data model, merge-conflicts, ingest, mutations, search, automation, attachments, archive backends, profiles/sync, web UI, link health, api, android, web-auth, performance), split from `dev-docs.md` + `android-dev-docs.md`
+- `/start/quickstart/`: install heads-up, capture loop, search syntax, full command overview
+- `/cli/*`: CLI guide (adding, searching, terminal-ui, editing, attachments, tags-folders, import-export, automation, link-health, completions, sync, backup-restore, serving)
+- `/app/*`: App guide (web-ui, desktop, android, adding, finding, organizing, check-center, library-settings, pairing)
+- `/config/*`: Configuration guide (overview, archive-backends, storage, profiles, self-hosting, backup-restore, troubleshooting)
+- `/reference/cli/`: CLI reference mirrored from the prebuilt `liber --help` plus the project command table
+- `/reference/api/`: `/api/v2` surface plus auth model (checked against `openapi.json`)
+- `/reference/changelog/`: change history, recent first
+- `/dev/*`: internals remapped from `developer-docs.md` (index map, architecture, building, storage, search, sync, addressing, automation, archiver, check, picker, server-tauri, settings-profiles, auth, discovery, android, windows, portability)
 - `/local/AGENTS.md`: AI assistant handoff (not part of the site, not in sidebar)
 
 ## Sources
 
-Single source of truth lives one level up (`../`): `docs.md`,
-`Project-readme.md`, `dev-docs.md`, `syncing-guide.md`,
-`android-readme.md`, `android-dev-docs.md`, `self-hosting.md`. The app
-repo at `/home/nix/Artem/Dev/liber` backs `reference/cli.md`
-(`go run . --help`) and behavior questions.
+Single source of truth lives one level up (`../`), copied from the Rust project (`project-liber/` docs): `README.md` (full user docs, v0.11.0), `developer-docs.md` (maintainer internals), plus `changelog.md` (history), `WINDOWS.md` (packaging notes). The prebuilt binary at `project-liber/result/bin/liber` backs `reference/cli.md` (`--help` per subcommand, no compilation needed) and `project-liber/openapi.json` backs `reference/api.md`.

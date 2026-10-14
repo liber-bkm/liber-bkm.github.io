@@ -1,77 +1,36 @@
 ---
 title: Search internals
-description: Flag grammar, the fzf integration protocol, and deep search control flow.
+description: Scoped parser, tantivy index, readability, snippets, and favicons.
 ---
 
-## Search scoping
+The tantivy index lives at `<base>/.liber/tantivy/`, regenerable, excluded from sync. Fields: title, description, url, tags, folder, content (extracted archive and markdown text). Sort modes: relevance, newest, oldest, visited, title. `resolve_sort_mode` picks the default: an explicit sort always wins, an empty or missing query lists newest first, and a query ranks by relevance. All list surfaces (CLI, API, Tauri) share it, and the web Library preselects newest. If the index is missing or corrupt, reads fall back to SQLite LIKE and `liber reindex` rebuilds it.
 
-`main.go`'s `parseSearchFlag` recognizes `-s`, `-sl`, and combinations:
+## Scoped parser
 
-```text
--s               search everything (fzf if available)
--sl              same, but force the plain prompt
--s[nutdf]+       restrict to specific field(s): n=title, u=url, t=tags, d=description, f=folder
--sl[nutdf]+      same restriction, forced to the plain prompt
-```
+Scoping lives in one core parser (`parse_query_terms`): whitespace split with double-quote grouping, `field:value` prefixes (`title`, `url`, `tag` plus `tags`, `folder`, `desc` plus `description`, all case insensitive), unknown or empty prefixes kept as literal text. Terms combine with AND; bare words match all five metadata fields. A default field set restricts bare words only, prefixes always win: CLI `--in` and the API/Tauri `scope` parameter share `parse_field_list` (names or letters `n,u,t,d,f`). The same terms drive all three match paths: per-term SQL LIKE conditions (ANDed, so pagination totals stay exact), `bookmark_matches_query` for in-memory lists (picker, open fallback), and `scoped_tantivy_query` for deep search (scoped terms become `field:"text"` clauses, restricted bare words become OR groups). Relevance ranks on free words, falling back to all term texts when every term is scoped. There is no `content:` prefix by design: saved content is searched only for bare words under `--deep`.
 
-Letters combine freely and in any order (`-sdf` and `-sfd` are equivalent). `SearchFields` (in `store.go`) is the shared representation threaded through both the plain-prompt path (`Store.Search`, plain substring matching per selected field) and the fzf path (`withNthFor`, see below).
+## Readable text and snippets
 
-## fzf integration
+Readable text (`extract_readable_text`) strips chrome (`nav`, `aside`, `footer`, and friends) and keeps `p`/`li`/quote/heading blocks of 20 plus chars, falling back to the full dump only when no block survives; it feeds the index `content` instead of the raw archive dump. The marker trick needs two lol_html passes because `prepend` plus `on_end_tag` in one handler truncates the stream. Notes index by body only: the `---` frontmatter never enters the index (it used to pollute relevance and snippets with uuid/date lines).
 
-`liber -s` uses fzf when it's available. This section covers the mechanics.
+Snippets come from the tantivy `SnippetGenerator` on the content field (200 chars, `<b>` highlights, HTML-escaped fragments safe to inject), surfaced as the optional `snippet` field on list payloads over every frontend plus a Deep toggle in the Library. Cards clamp to two lines and table rows to one; clicking a snippet toggles the clamp in place (`stopPropagation`, so the detail drawer stays closed) with the virtualizer re-measuring the row. Match source labels (archive versus notes) plus indexed-content age are explicitly deferred: the index merges both texts into one `content` field and bookmarks carry no archive timestamp, so either needs index schema work first. The content field is `TEXT | STORED`; older indexes auto-migrate (schema mismatch wipes and recreates, then the next reindex refills, since the index is regenerable by design).
 
-### Field layout
+## Incremental indexing
 
-`fzf.go` feeds fzf tab-delimited lines with a fixed 7-field layout:
+Every write path reindexes incrementally: create, edit, delete, notes, and archive operations reindex one document right after the write, deletes drop the term. Index failures never fail the write (`let _ =`, reindex stays the repair path). Bulk paths batch instead: import and sync replay suppress per-row indexing through `Store::set_auto_index` and reindex the touched set once at the end, so the 10k import stays fast. Shared `index_content` assembly keeps single and bulk paths identical. Attach and detach skip indexing: no indexed field covers attachments.
 
-```text
-1: id (always hidden -- lookup key only)
-2: title      3: url         4: tags
-5: folder     6: description 7: badges (always visible)
-```
+## Tantivy notes
 
-Field 1 (id) is never displayed; it exists purely so the preview callback and post-selection parsing can identify a bookmark exactly, without guessing from displayed text.
+The `uuid` field is `STRING | STORED`: untokenized so deletes by exact term work (`delete_term` needs an indexed field, `STORED` alone is invisible to it) while staying out of full text results. The query parser only searches the content fields, never `uuid`.
 
-### `--with-nth` ties display and match scope together
+## Favicons
 
-fzf's `--with-nth` controls **both** what's displayed **and** what's fuzzy-matched. Restricting to a field also restricts search to it, which is exactly what field-scoped search (`-sn`/`-sd`/`-st`/`-sf`/`-su`) relies on (`withNthFor` in `fzf.go` computes the field-index list per scope).
+Favicons live beside content at `.liber/favicons/<host>.<ext>`, one per host, fetched lazily on first serve (link-rel-icon parse, then `/favicon.ico`, raster magic only so SVG never lands, 64KB cap) and cached afterwards; misses leave no file behind, which also keeps offline use safe, and the UI falls back to a letter tile. The endpoint answers with a day of cache headers; Tauri renders through blob URLs. One shared `Favicon` component serves both views with `sm` (table, 20px before the title) and `md` (card, 36px) variants with `loading="lazy"` for the virtual list. Library-wide refresh (`Store::distinct_hosts` plus `refresh_library_icons`, `POST /api/v2/favicons/refresh`, Tauri `refresh_favicons`, Settings Site icons section) walks every bookmark host once: cached hosts count as skipped unless the re-fetch box is checked, failures are listed per host instead of failing the batch, and network work runs in `spawn_blocking` like every other blocking fetch path. Fresh icons appear after a library reload (day cache headers).
 
-The flip side: this is also why the **default**, unrestricted `-s` scope (title/url/tags/folder, `--with-nth=2,3,4,5`) doesn't include description, even though the plain-prompt fallback's default *does* search description. Including description in the default fzf scope would force it into the visible columns too (there's no way with `--with-nth` alone to match on a field without displaying it), so the two search paths have a small, known asymmetry here. Field 7 (badges) is always appended to whatever `--with-nth` value is computed, since it's presence-at-a-glance info, not something you'd want to search by.
+## Saved searches
 
-### The `--delimiter` gotcha
+Saved searches live in `Config.saved_searches`, not the database: presets are device-local UI state like view preferences, so they travel with the config file and never enter the oplog. One core validator (non-empty 64-char name, scope through `parse_field_list`, sort through `parse_sort_mode`) serves the CLI (`liber searches` list/add/delete/run, run reuses the list path), the API (`GET plus POST /api/v2/searches`, `POST .../delete` with live-config write-through like profiles), and Tauri IPC; adds upsert case-insensitively and the list stays name-sorted. The sidebar section applies a preset by pushing `{q, scope, sort, nonce}` into the Library, which syncs its local search state on nonce change; the save button prompts for a name and posts the debounced query.
 
-**`--delimiter` needs the regex escape `\t` (backslash, t, two characters), not a literal tab byte**, when combined with `--nth`/`--with-nth`. Passing a literal tab silently breaks all matching (fzf just returns no results, no error). This was confirmed directly against a real fzf binary: a literal-tab delimiter matched nothing, and the same command with `--delimiter='\t'` worked immediately. `fzf.go` builds the flag as `"--delimiter=\\t"` (a literal `\` followed by `t` in the resulting argument string) for exactly this reason.
+## Bulk capture
 
-### Preview callback
-
-The right-hand preview pane is rendered by fzf shelling back into the liber binary itself: `--preview '<path-to-liber> __preview {1}'`, where `{1}` is fzf's placeholder for the raw (never display-transformed) first field, the hidden id. `main.go` routes the internal `__preview <id>` subcommand to `preview.go`'s `runPreview`, which re-reads the index and prints a labeled Title/URL/Tags/Folder/Description block. `selfPath()` uses `os.Executable()` to get an exact path to the running binary rather than assuming `liber` is on `PATH`.
-
-This pattern (shell back into your own binary for a preview) is how most non-trivial fzf integrations handle rendering something fzf itself can't compute. A typical example is git log pickers doing `--preview 'git show {1}'`.
-
-### fzf's stdout is always the raw line
-
-Regardless of `--with-nth`, fzf's stdout on selection is the full original input line, not the display-transformed version. `pickWithFzf` relies on this: it always splits the returned line on tab and reads field 0 (the id), even when `--with-nth` was hiding most of the other fields from view.
-
-### Exit code handling
-
-fzf exit codes: `0` means picked something, `1` means no match, `130` means interrupted (Esc/Ctrl-C). `1` and `130` are both treated as "user cancelled, not an error". Anything else (fzf's own `2`, which covers things like no controlling terminal) is treated as a genuine failure and returned to the caller, which falls back to the plain prompt with a visible message rather than silently doing nothing. This was a real bug caught during testing: a no-TTY environment produced exit 2, which an earlier version of this code was lumping in with "cancelled", making `-s` silently do nothing.
-
-## Deep search
-
-`liber -s --deep` and `liber -sl --deep` add archive content as a second match surface, on top of whatever field scope (`-sn`/`-sd`/etc, or the default) is already active. A bookmark matches if its scoped metadata matches **or** its archive content does; `--deep` never narrows what field scoping already restricts, it only adds an extra way to match.
-
-`extractArchiveText` (`deepsearch.go`) is a best-effort, dependency-free HTML-to-text pass: strip `<script>`/`<style>` blocks first (their content is markup/code, not page text), then strip every remaining tag, then HTML-unescape what's left. This isn't a real text extractor. Inline `style="..."` attributes, SVG contents, and similar are simply removed along with their enclosing tag, which is a feature here as much as a limitation: single-file archives typically inline images as base64 data URIs inside tag attributes (e.g. `<img src="data:...">`), and stripping the whole tag conveniently discards that bulk along with the markup, rather than searching in it. Reads are capped at `maxArchiveScanBytes` (5MB) per file as a defensive limit against pathologically large archives. A bookmark with a huge archive is only partially scanned past that point.
-
-**Why deep search needed its own control flow, not just a flag threaded into the existing one:** the existing fzf path relies on fzf itself doing live, interactive fuzzy-filtering as the user types inside the picker. There's no upfront "query" on liber's side ever. Deep search is the opposite: matching archive content requires a concrete literal string to grep for *before* any list can be shown at all. The fix is `promptDeepQuery`, called once by both `runSearch` and `runSearchLegacy` when `deep` is set, producing a fixed candidate list that's then handed to either `runSearchFzfList` (fzf over a static list, no live requery) or `runPlainListLoop` (the plain picker over the same static list). The non-deep path's `runSearchFzf`/`runSearchPrompt` instead keep re-fetching `store.All()` or re-prompting on every loop iteration, since there's no expensive upfront computation to avoid repeating there.
-
-This split also fixed a real bug caught during testing: an earlier version threaded a `deep` bool straight into the original `runSearchFzf`, which prompted for the deep query *inside* the fzf-attempt function. When fzf then failed at runtime (e.g. no controlling terminal) and control fell through to the plain-prompt fallback, that fallback had no memory of the already-typed query and asked for it again, so the user had to type the same (potentially expensive) query twice. Separating "compute the candidate list once" from "which UI browses it" fixed this: the query is now asked exactly once per invocation, before either UI is attempted.
-
-## Open by name and pick
-
-`liber -o` (`open.go`, `main.go`) tries `parseIDSpec` first; when the spec contains anything outside `[0-9, -space]` it is treated as a search query instead (`isQuerySpec`, multi-word argv joined with spaces). One match opens directly through the shared `markOpened` helper (same history write as ids); several go to fzf or a capped (30) plain prompt. `liber pick` (`pick.go`) is the scriptable twin: single match prints the URL to stdout, prompts and progress go to stderr, and no match exits non-zero with stdout untouched.
-
-Both share `searchTargets`/`capShown`/`pickFzfTarget` (`query.go`); only the prompt UI differs (stdout vs stderr), which is why the prompts stay separate.
-
-## Ranking and sort
-
-`Store.Search` takes a `SortMode` (`store.go`): default relevance scores title-prefix 0, title-substring 1, other matched fields 2, ties by ID. Explicit modes (`ParseSortMode`) order by `CreatedAt`, `LastOpenedAt` (nil sorts last), or lowercased title. `filterDeep` shares `orderResults`, archive-only matches scoring like other fields. The fzf path is intentionally unsorted (fzf re-scores input itself); `--sort` mainly affects the plain prompt, web UI, `-o`, and `pick`. CLI threads the mode from `--sort`, web from the `sort` param (invalid values fall back to relevance).
+Bulk capture loops the normal single add on purpose, no bulk endpoint: `liber add` takes several URLs (single-URL flags like `--title`/`--description`/`--attach`/`-i` are refused in bulk) and the web dialog pastes one-per-line with shared tags/folder/archive, each URL going through title fetch, duplicate guard, and archive with a per-URL added/duplicate/failed report. Duplicates skip without prompting, matching import semantics; the single-add confirm flow is untouched. Per-request overhead is irrelevant next to title fetch and archiving, so a batch endpoint would only add contract.

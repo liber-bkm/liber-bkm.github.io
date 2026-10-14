@@ -1,99 +1,131 @@
 ---
 title: Install on Linux
-description: Install liber on Linux from source, on Arch Linux, on NixOS, or via the generic binary.
+description: Nix flake outputs, profile install, NixOS input, and plain source builds.
 ---
 
-import { Tabs, TabItem, LinkButton } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
-All dependencies are optional but are nice to have. However fall back options are available in case they are not installed 
-- [fzf](https://github.com/junegunn/fzf) for cli live search
-- [single-file-cli](https://github.com/gildas-lormeau/single-file-cli)for full web archives (including javascript content)
-	- alternatively instead of single-file-cli, [monolith](https://github.com/y2z/monolith) can be used as well 
-- `git` for history and git based syncing
+## Dependencies 
+
+Liber has no dependencies, however it allows using third party backends for archiving webpages [single-file](https://github.com/gildas-lormeau/single-file-cli) or [monolith](https://github.com/y2z/monolith). This allows including javascript content within the archived pages, liber by default disables javascript from the archived pages. Optionally `git` is required for users who want to sync using git.
+
+## Install 
 
 <Tabs>
-<TabItem label="From source">
 
-Requires Go 1.22 or later:
+<TabItem label="Appimage">
+
+
+If you want universal package that works with any distro, or if your distro specific package isn't provided, you can install the Appimage version or Generic tarball installation 
+
+:::note
+The Appimage version only includes the desktop app, If you want full package installation either use your distro specific package or install manually using compile linux binary from tarball
+:::
+
+
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-x86_64.AppImage" icon="down-arrow">Appimage-x86_64</LinkButton>
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-aarch64.AppImage" icon="down-arrow" variant="secondary">Appimage-ARM64</LinkButton>
+
+</TabItem>
+
+<TabItem label="Generic Linux Tarball">
+
+The compiled binary is available for every distro. You can download and add the binaries to your path from link or simply follow the shell guide below.
+
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-x86_64.tar.gz" icon="down-arrow">x86_64.tar.gz</LinkButton>
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-aarch64.tar.gz" icon="down-arrow" variant="secondary">ARM64.tar.gz</LinkButton>
 
 ```sh
-git clone https://github.com/liber-bkm/liber.git
-cd liber
-go build -o liber .
-```
-
-Or with the Makefile:
-
-```sh
-make && sudo make install
+# Download and extract
+wget https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-x86_64.tar.gz
+tar xzf liber-linux-x86_64.tar.gz
+cd liber-*
+# Move the file to PATH
+mv liber* /usr/local/bin # to install them system wide or use ~/.local/bin to install them per user
 ```
 
 </TabItem>
-<TabItem label="Arch Linux">
 
-Install the optional dependencies:
+<TabItem label="Archlinux">
 
-```sh
-sudo pacman -S fzf
-paru -S single-file-cli # or use your own method of installing packages from aur
-```
+Archlinux PKGBUILDs are available. You can download and install them using AUR manager of your choice. 
 
-To install the binary package:
+To install compiled binaries:
 
 ```sh
-wget https://github.com/liber-bkm/liber/releases/latest/download/PKGBUILD
+wget https://github.com/liber-bkm/liber/blob/main/dist/arch/liber-bin/PKGBUILD
 makepkg -si
 ```
 
-To install the package from latest git branch:
+Or if you want to compile package yourself:
+
 ```sh
-https://github.com/liberbkm/liber/releases/latest/download/PKGBUILD-git
-mv PKGBUILD-git PKGBUILD
+wget https://github.com/liber-bkm/liber/blob/main/dist/arch/liber/PKGBUILD
 makepkg -si
 ```
 
 </TabItem>
+
 <TabItem label="NixOS">
 
-Add to your flake inputs:
+Liber repo provides the flake to install the package. Add the repo into your flake inputs:
 
 ```nix
-inputs = {
-  liber.url = "github:liber-bkm/liber";
-  liber.inputs.nixpkgs.follows = "nixpkgs";
+inputs.liber = {
+    url = "github:liber-bkm/liber";
+    inputs.nixpkg.follows = "nixpkgs";
 };
 ```
 
-Then install with `environment.systemPackages` or home-manager `home.packages`:
+Install the package either system-wide using `environment.systemPackages` or using home-manager `home.packages`
 
 ```nix
-{ config, pkgs, inputs, ... }: {
-  home.packages = [
-    inputs.liber.packages.${stdenv.hostPlatform.system}.default
-  ];
+{inputs, pkgs, ... }:
+{
+    environment.systemPackages = [ inputs.liber.packages.${pkgs.stdenv.hostPlatform.system}.bundle ]; # you can relapce .bundle with .default or .desktop if you want cli or desktop versions only 
 }
 ```
 
-Or try it without installing:
+You can also run the package directly without installing.
 
-```sh
-nix shell github:liber-bkm/liber # enter shell with liber installed
-# OR
-nix run github:liber-bkm/liber # run liber commands directly 
+```nix
+nix run github:liber-bkm/liber
 ```
 
-</TabItem>
-<TabItem label="Generic Linux">
+or use developmet shell 
 
-
-Download the binary from [latest releases](https://github.com/liber-bkm/liber/releases/latest) and place it in your `PATH`:
-
-```sh
-# e.g.
-/usr/local/bin
-# or
-~/.local/bin
+```nix
+nix shell github:liber-bkm/liber
 ```
 
+:::note
+Nix compiles the binaries from source so it may take some time to install the package, currenly there's no binary cache available yet.
+:::
+
 </TabItem>
+
+<TabItem label="Deb">
+
+.deb package is available for debian based distros i.e Debian, Ubuntu, Linux Mint ... Simply download and install the package as you'd normally do
+
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-x86_64.deb" icon="down-arrow">x86_64.deb</LinkButton>
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-aarch64.deb" icon="down-arrow" variant="secondary">ARM64.deb</LinkButton>
+
+
+</TabItem>
+
+
+<TabItem label="RPM">
+
+RPM package is available for RPM based distros i.e Fedora, OpenSUSE, ... Simply download and install the package as you'd normally do
+
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-x86_64.rpm" icon="down-arrow">x86_64.rpm</LinkButton>
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-aarch64.rpm" icon="down-arrow" variant="secondary">ARM64.rpm</LinkButton>
+
+
+</TabItem>
+
 </Tabs>
+
+Continue with [Quickstart](/start/quickstart/).

@@ -1,164 +1,90 @@
 ---
 title: Quickstart
-description: Install liber, learn the basics, and see every command at a glance.
+description: Install liber, learn the capture loop, and see every command at a glance.
 ---
 
 import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
 ## 1. Install first
 
-liber is a native binary. Pick your platform below. Optional features need a few extra tools (all linked, none required up front):
-
-- [fzf](https://github.com/junegunn/fzf): fuzzy finder for live search
-- [single-file-cli](https://github.com/gildas-lormeau/single-file-cli): full-page archive rendered in a headless browser
-- [monolith](https://github.com/y2z/monolith): alternative archiver, no browser needed
-- [git](https://git-scm.com): history and syncing
-
-The built-in `native` archive backend needs nothing at all.
-
 <CardGrid>
   <Card title="Linux" icon="linux">
-    Build from source, Arch Linux, or NixOS flake.
+    Nix flake outputs, profile install, or plain source build.
 
     <LinkButton href="/install/linux/" icon="document">Linux install</LinkButton>
   </Card>
   <Card title="macOS" icon="apple">
-    Build from source with Homebrew dependencies.
+    Source build with a few extra dependencies.
 
     <LinkButton href="/install/macos/" icon="document">macOS install</LinkButton>
   </Card>
   <Card title="Windows" icon="seti:windows">
-    Installer-based setup.
+    Installer-based setup with automatic PATH handling.
 
     <LinkButton href="/install/windows/" icon="document">Windows install</LinkButton>
   </Card>
   <Card title="Android" icon="mobile-android">
-    Native app, standalone or server-connected.
+    Native app, standalone or connected to your server.
 
     <LinkButton href="/install/android/" icon="document">Android install</LinkButton>
   </Card>
 </CardGrid>
 
-## 2. Basics
+On first run, `liber init` walks you through setup (base dir, device id, backend, token). It refuses when already configured.
 
-By default liber stores bookmarks in a `Bookmarks` folder inside your home directory. Run `liber` with no arguments to list flags.
+## 2. The capture loop
 
 ```sh
-liber <url>                    # save a bookmark
-liber <url> -i                 # save interactively (title, tags, folder prompts)
-liber <url> -md -a             # also write markdown notes copy + full-page archive
-liber <url> -t news reading -f articles  # tags + subfolder at creation
-
-liber -s                       # search/browse (fzf live preview if installed)
-liber -l                       # list all bookmarks with ids
-liber -o 3                     # open bookmark 3 in the browser
-liber -e 3                     # edit bookmark 3 interactively
-liber -d 3                     # delete bookmark 3 (asks first)
-
-liber --serve                  # local web UI at http://127.0.0.1:8080
-liber config                   # show config file and bookmark locations
+liber add https://example.com -t reading --folder tech
+liber add <url1> <url2> -t reading   # several at once, shared flags
+liber list
+liber open 1
+liber serve
 ```
 
-Flags combine freely, e.g. `liber <url> -i -t news reading -f articles -md -a`.
+Open the printed address in a browser. That is the whole loop: capture from anywhere, find instantly, open with history, and optionally serve the library to your network.
 
-## 3. Features 
+Bookmarks are addressed by short numeric id (`edit 3`) or UUID prefix, with comma lists and dash ranges (`edit 1-3,5`, at most 1000 ids per range). Ids are per-device display aliases; sync merges by UUID and never renames them.
 
-- Plain HTML bookmarks
-- Web page archives, markdown notes and file attachments 
-- Tags and directories 
-- Fully functional CLI and webUI
-- Duplicate detection 
-- Link checker (checks for stale or outdated bookmarks)
-- Powerful search: search through specific tags, directories or within the contents of archived bookmarks 
-- Configurable bookmark directories and paths
-- Import and Export bookmarks 
-- Automation rules to classify bookmarks into specific tags or folder 
-- Self hosting friendly
-- Sync friendly
-- Merge conflict resolutions in case of personal sync services without relying on self hosting 
-- Profiles 
+## 3. Search syntax
 
-## 4. Bird's-eye view
+Search terms accept `field:value` prefixes (`title:`, `url:`, `tag:`, `folder:`, `desc:`, with `tags:` and `description:` synonyms), combined with free words; every term must match. Quote multi-word values (`tag:"rust web"`). A bare word searches all fields; `--in` on the CLI, the `scope` API parameter, and the Library field selector restrict bare words to listed fields (names or letters `n,u,t,d,f`). Prefixes always win for their own term. The same syntax works in `list`, `open`, the `pick` and web search boxes, and desktop and mobile search.
 
-Every command in one place (details live under [Guide](/guide/adding/) and [Reference](/reference/cli/)):
+## 4. Every command
+
+Details live under [CLI guide](/cli/adding/) and [Reference](/reference/cli/):
 
 ```text
-liber <url>                    save a bookmark
-liber <url> -i                 save interactively (prompts for description, tags, folder)
-liber <url> -md                also write a markdown copy
-liber <url> -a                 also write a full-page archive (backend set via
-                               config archive_backend: single-file / monolith / native)
-liber <url> -md -a             both markdown and archive
-liber <url> -t tag-a tag-b     attach tags at creation time
-liber <url> -f subfold         save into a subfolder of the base directory
-liber <url> -at report.pdf     attach a local file (repeatable; see "Attachments")
-liber -o 3                     open bookmark id 3
-liber -o 1,3-8                 open bookmarks at ids 1 and 3 to 8
-liber -o <query>               find by search text (one match opens, several offer a pick)
-liber pick <query>             print the URL to stdout, for pipes and scripts
-liber -s                       search/browse bookmarks, open or edit them (fzf if available)
-liber -sn / -su / -st / -sd / -sf
-                               same, but scoped to one field: title / url / tags / description / folder
-liber -sdf                     fields combine freely, e.g. this is folder+description only
-liber -sl                      force the plain prompt even if fzf is installed
-liber -sld                     legacy prompt scoped to descriptions (mix -l with any of n/u/t/d/f)
-liber -s --deep / -sl --deep   also full-text search inside archived pages (see "Deep search")
-liber -l                       list all bookmarks with their ids
-liber -e <id>                  edit a bookmark interactively (also offers to add a
-                               markdown copy or archive if either is missing)
-liber -e <id> -t tag-a tag-b   set a bookmark's tags directly (non-interactive)
-liber -e <id> -f subfold       move a bookmark to a different folder (non-interactive)
-liber -e <id> -md              add a markdown copy if it doesn't have one yet
-liber -e <id> -a               add an archive if it doesn't have one yet
-liber -e <id> -u <new-url>     edit url of specific id
-liber -e <id> -at report.pdf   attach a file to an existing bookmark (repeatable)
-liber -e <id> -dt report.pdf   detach by name or number (deletes the saved copy)
-liber -e <ids> ...             <id> can be a range/list too: 1-3, 2,5,3, or 1-4,7-9 --
-                               applies the same flags (or interactive edit, one at a
-                               time) to each matched bookmark; see "Batch operations"
-liber -d <id>                  delete a bookmark (asks for confirmation)
-liber -d <id> -y               delete without confirmation
-liber -d <ids>                 <id> can be a range/list too, same as -e above
-liber -r                       reindex: adopt files, relink copies, keep missing as pending
-liber -r --prune               same, dropping pending entries
-liber -r --compact             same, renumbering ids to close gaps
-liber -r --merge               same, first folding sync conflict copies in
-liber -r --merge --all         same, merging every .liber json candidate
-liber -r --prune-journal       delete applied journal files older than 90 days
-liber --import <path>          import a browser bookmark export (see "Import")
-liber --import <path> -md -a   same, also generating markdown/archives for each (slow)
-liber --export-bookmarks <path>
-                               write the collection as a re-importable export
-liber --tags / --folders       list tags/folders with counts (see "Tag and folder hygiene")
-liber --tags rename <a> <b>    rename a tag everywhere (merges if <b> already exists)
-liber --tags delete <tag>      remove a tag from every bookmark that has it
-liber --folders rename <a> <b> rename a folder (and its subfolders) everywhere
-liber --folders delete <f>     move a folder's bookmarks back to the root
-liber --history                list bookmarks by most recently opened (see "History")
-liber --check [ids]            check link health, then prompt per item (see "Link health")
-liber --check --workers N      same, with N parallel requests (default 12)
-liber --check --stale 720h     same, skipping recently checked bookmarks
-liber --auto add --match <s> --folder <f> --tag <t1 t2>
-                               auto-classify new bookmarks by URL (see "Automation")
-liber --auto / --auto edit / --auto delete / --auto apply
-                               list/edit/delete/re-run automations (see "Automation")
-liber --auto learn [--min N] [--create]
-                               suggest host rules from folder clusters
-liber --profile                list profiles, with the active one marked (see "Profiles")
-liber --profile <name>         switch to <name>, creating it if it's new
-liber --profile default        switch back to the non-profile layout
-liber --profile delete <name>  stop tracking a profile (its data is untouched)
-liber --sync / --sync -p       commit (and optionally push) if it's a jj/git repo (see "Sync")
-liber config                   show the active config file and its path
-liber config set <key> <val>   set one config key (validated before writing)
-liber -v                       print the version
-liber --serve                  local web UI for search + add (see "Web UI")
-liber --serve --addr <host:port>
-                               use a different address (default 127.0.0.1:8080)
-liber --serve --auth-token <tok>
-                               require a token (browser login, bearer for scripts)
-liber --export-site            export to a static html
-liber --export-site <path>     export to a specific path
+add <url>                      add bookmark (--title -t --folder --description --markdown --archive --attach; -i prompts for missing fields, needs a terminal)
+add <url1> <url2> ...          add several at once (shared flags; single-URL flags refused)
+list [query]                   search and list, newest first (--sort newest|oldest|visited|title, --in title,url,tag,folder,desc, --deep); [md]/[arch] markers
+open <spec>                    open in browser, records history (falls back to search on miss)
+edit <spec>                    update fields; with no flags opens the full terminal editor
+pick [query]                   fuzzy picker, then open, archived copy, notes, or edit (prints the URL when piped; see [Terminal UI](/cli/terminal-ui/))
+delete <spec>                  delete with confirm (--yes skips it)
+attachments <spec>             list attachments with numbers
+archive <spec>                 archive page (--backend builtin|browser|single-file|monolith|auto)
+reindex [--prune --compact-ids]  repair library; --compact-ids closes id gaps to dense 1..N
+export --site [dir] / --bookmarks <file>  static site / Netscape file
+import <file>                  Netscape import (--markdown --archive), duplicates skipped, archive failures reported as warnings
+backup <file>                  self-contained tarball of the library
+restore <file>                 replace library from a backup (--force with confirm, --yes skips it), then reindexes
+tags list|rename|delete        rename merges onto existing tags
+folders list|rename|delete     rename moves subtrees, delete moves to root
+auto ...                       rules: add, list, edit, apply, learn, delete
+check [spec]                   link check (--workers N --stale 7d --apply; TTY apply prompts per item)
+sync export|import             exchange merge bundles between devices
+sync push <url> | pull <url>   push or pull bundles over HTTP (--token, --since cursor)
+sync commit [--push]           git snapshot of the base dir (never inits a repo)
+sync prune [--days N]          drop oplog entries older than N days (default 90)
+searches ...                   saved search presets: add, list, run, delete
+config get|set|list            configuration keys (see Configuration)
+init                           first-run setup wizard (needs a terminal)
+history                        recently opened with open counts
+profile list|switch|delete     named base-dir profiles sharing one config
+completion <shell>             shell completions (bash, zsh, fish, powershell, elvish)
+serve                          self host API plus web UI; prints localhost and LAN URLs (--qr pairing code, mDNS on unless --no-mdns)
+discover                       list liber servers on the local network (--timeout)
 ```
 
-Next: [Adding bookmarks](/guide/adding/) for creation details, [Searching](/guide/searching/) for search scoping.
+Next: [Adding bookmarks](/cli/adding/) for creation details, [Searching](/cli/searching/) for search scoping.

@@ -1,33 +1,23 @@
 ---
 title: Install on macOS
-description: Install liber on macOS
+description: Source build with a few extra dependencies, plus the Gatekeeper note.
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
+Disk imagebinary and tar.gz are available for macos. Works on both intel as well as Apple Silicon chips 
 
-- On macos fzf is available via homebrew 
-	```sh
-	brew install fzf
-	```
-	and `single-file-cli `can be installed using :
-    
-	**for apple silicon**
-	```sh
-	curl -L "https://github.com/gildas-lormeau/single-file-cli/releases/latest/download/single-file-aarch64-apple-darwin" -o ~/.local/bin/single-file
-	```
-	**for Intel**
-	```sh
-		curl -L "https://github.com/gildas-lormeau/single-file-cli/releases/latest/download/single-file-x86_64-apple-darwin" -o ~/.local/bin/single-file
-	```
-- Download `liber-darwin-arm64` if you are using M-chips or `liber-darwin-amd64` for intel chips from [latest release](https://github.com/liber-bkm/liber/releases/latest/). Rename them to liber and place them in ~/.local/bin
+To download the desktop app, Download and install as you'd normally instally any other desktop app
 
-You can also build liber using go 
+<LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-desktop-darwin.dmg" icon="down-arrow">liber-darwin</LinkButton>
+
+To install CLI version along with the desktop app, download and extract the tarball and add it to your path using the following commands:
 
 ```sh
-git clone https://github.com/liber-bkm/liber.git
-cd liber
-go build -o liber .
-mv liber ~/.local/bin/ # or /usr/local/bin
+tar xzf liber-cli-darwin.tar.gz
+cd liber-*
+mv liber-* ~/.local/bin
 ```
 
-Run `liber config` to locate the config file and set `base_dir` as needed.
+Continue with [Quickstart](/start/quickstart/).

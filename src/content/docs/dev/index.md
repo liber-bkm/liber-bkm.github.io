@@ -1,31 +1,33 @@
 ---
 title: Developer docs
-description: Internals, invariants, and gotchas for anyone reading or changing liber's source.
+description: Internals, invariants, and gotchas for anyone reading or changing liber source.
 ---
+
+Code stays uncommented; explanation lives here. User facing docs are in the [CLI guide](/cli/adding/) and [Reference](/reference/cli/).
 
 Three principles explain most design decisions in the codebase:
 
-1. **Recorded paths, never pattern matching.** Every file liber touches is named explicitly on its own bookmark's index record. Nothing ever finds files by glob or filename pattern. This single invariant is what makes reindexing, renames, and quarantine safe.
-2. **Zero external dependencies.** Plain Go plus the standard library only. A feature that needs a dependency needs a stronger justification than one solved in stdlib (this ruled out an HTML parser for import and a database for indexing).
-3. **Explicit beats convention.** A user's direct choice (`-f`, a browser import's folder, an absolute `*_dir` override) always wins over automation or defaults. Several mechanisms below are just this precedent applied consistently.
+1. **Recorded paths, never pattern matching.** Every file liber touches is named explicitly on its own bookmark's store row. Nothing ever finds files by glob or filename pattern. This single invariant is what makes reindexing, renames, and quarantine safe.
+2. **UUID identity, numeric display.** Sync-safe UUIDs are the merge key everywhere; short numeric ids are per-device display aliases only. The numeric reassign class from the old Go design is gone.
+3. **Explicit beats convention.** A user's direct choice (a flag, an import folder, an absolute dir override) always wins over automation or defaults. Several mechanisms below are just this precedent applied consistently.
 
 ## Map
 
-| Page | Covers | Main files |
-| ---- | ------ | ---------- |
-| [Data model and reindexing](/dev/data-model/) | Records, filenames, reindex pipeline, merge, journal, why no database | `store.go`, `create.go`, `edit.go`, `reindex.go`, `journal.go` |
-| [Merge conflict handling](/dev/merge-conflicts/) | Candidate scan, fold rules, base selection, journal replay order | `reindex.go` |
-| [Ingest: dedupe and import](/dev/ingest/) | URL normalization, Netscape parsing | `dedupe.go`, `import.go` |
-| [Mutations: taxonomy, history, batch](/dev/taxonomy/) | Rename-is-merge, open tracking, id specs | `taxonomy.go`, `search.go`, `idspec.go`, `delete.go` |
-| [Search internals](/dev/search/) | Flag grammar, fzf protocol, deep search | `main.go`, `store.go`, `fzf.go`, `preview.go`, `deepsearch.go` |
-| [Automation internals](/dev/automation/) | Matching, the applied-rules ledger, reapply | `automation.go`, `create.go` |
-| [Attachments internals](/dev/attachments/) | Record shape, naming, reindex and web handling | `attach.go`, `reindex.go`, `webui.go` |
-| [Archive backends internals](/dev/archive-backends/) | `runArchive` dispatch, monolith pipe, native snapshot engine | `archive.go`, `archive_native.go` |
-| [Profiles and sync](/dev/profiles-sync/) | `effectiveBaseDir`, repo discovery | `config.go`, `profile.go`, `sync.go` |
-| [Web UI and export](/dev/webui/) | Templates, reuse of CLI machinery, concurrency, pagination, static export | `webui.go`, `render.go`, `export_site.go` |
-| [Link health check](/dev/link-health/) | Worker pool, classification, check stamps, quarantine | `check.go`, `store.go` |
-| [JSON API](/dev/api/) | Bookmarks, tags, rules, profiles, check, settings, library endpoints | `api.go` |
-| [Android internals](/dev/android/) | Wrapper architecture, build, storage, theme, distribution | `android/`, `config.go`, `dns.go` |
-| [Web auth](/dev/web-auth/) | Token resolution, browser cookies, API bearers | `auth.go`, `webui.go` |
-| [Performance budgets](/dev/performance/) | Pinned scaling behavior and fix order | `perf_test.go` |
-
+| Page | Covers |
+| ---- | ------ |
+| [Building from source](/dev/building/) | Nix flavors, plain Linux, desktop, Android, verification commands |
+| [Architecture](/dev/architecture/) | Crates, frontend stack, contributor workflow || [Storage and reindexing](/dev/storage/) | SQLite store, filenames, reindex repair, backup format, title fetch |
+| [Search internals](/dev/search/) | Scoped parser, tantivy index, readability, snippets, favicons |
+| [Sync internals](/dev/sync/) | Oplog merge, artifact ops, snapshots, pick endpoint, converge |
+| [Addressing and short IDs](/dev/addressing/) | Spec grammar, ranges, alias assignment and healing |
+| [Automation internals](/dev/automation/) | Matching, the applied-rules ledger, reapply, learn |
+| [Archiver internals](/dev/archiver/) | Builtin snapshot engine, backend chain, external wrappers |
+| [Link check internals](/dev/check/) | Classification, stale durations, apply flow, DNS decision |
+| [Picker and interactive add](/dev/picker/) | TUI picker, numbered fallback, `add -i` prompt loop |
+| [Server and Tauri split](/dev/server-tauri/) | Core, server, IPC, offline desktop, CSP, mobile entry |
+| [Settings and profiles](/dev/settings-profiles/) | Allowlist, maintenance status, tracked profiles, capability matrix, virtualization |
+| [Auth internals](/dev/auth/) | Token model, cookies, derived bearers |
+| [LAN discovery](/dev/discovery/) | QR pairing plus mDNS mechanics |
+| [Android internals](/dev/android/) | Private storage, remote mode, deep links, build notes |
+| [Windows packaging](/dev/windows/) | GUI subsystem, NSIS PATH hooks, verification |
+| [Portability and performance](/dev/portability/) | Tested targets, budgets, 10k fixture |

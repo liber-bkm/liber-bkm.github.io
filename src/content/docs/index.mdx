@@ -1,9 +1,9 @@
 ---
 title: liber
-description: A cross-platform CLI bookmark manager that saves your bookmarks as plain-text HTML with powerful search, tags and folders. It includes a web UI for managing everything in the browser, archives pages for offline reading, and keeps markdown notes and file attachments for additional content.
+description: A local first bookmark manager with a CLI plus web UI plus desktop and mobile apps.
 template: splash
 hero:
-  tagline: "A cross-platform CLI bookmark manager that saves your bookmarks as plain-text HTML with powerful search, tags and folders. It includes a web UI for managing everything in the browser, archives pages for offline reading, and keeps markdown notes and file attachments for additional content."
+  tagline: "A local first bookmark manager: a fast CLI, a modern web UI plus desktop and mobile apps. Plain-text bookmark files with powerful search, tags and folders, offline archives, notes, and attachments."
   actions:
     - text: Get liber
       link: '#download'
@@ -26,42 +26,57 @@ hero:
 
 import { Card, CardGrid, LinkButton } from '@astrojs/starlight/components';
 
-Rule-based automation files new bookmarks into the right folders and tags on its own, and profiles keep separate collections, for example work and personal, fully independent of each other.
+Rule-based automation files new bookmarks into the right folders and tags on its own, profiles keep separate collections, for example work and personal, fully independent of each other, and sync keeps every device converged without loss.
 
-## See it in action
+## Features
 
-<div class="preview-grid">
-  <figure>
-    <img src="/liber-cli.gif" alt="liber CLI: saving, searching, and editing bookmarks in the terminal" loading="lazy" decoding="async" width="480" />
-    <figcaption>CLI: save, search, and edit without leaving the terminal.</figcaption>
-  </figure>
-  <figure>
-    <img src="/liber-webui.gif" alt="liber web UI: browsing, adding, and editing bookmarks in the browser" loading="lazy" decoding="async" width="480" />
-    <figcaption>Web UI: browse, add, and edit in the browser.</figcaption>
-  </figure>
-</div>
+<CardGrid>
+  <Card title="Capture">
+    One-command add with automatic title fetch, duplicate guard, notes, file attachments, and optional archived copy. Paste several URLs at once with a per-URL report, or capture without any extension through a bookmarklet.
+  </Card>
+  <Card title="Organize">
+    Tags and folders with merge semantics, autocomplete and suggestions in every dialog, and automation rules that stick: manual moves are never overwritten, with a learner that suggests rules from your library.
+  </Card>
+  <Card title="Find">
+    Instant search with relevance ranking, deep full-text search across saved pages and notes with expandable match snippets, saved search presets in the sidebar, site icons, and a fuzzy terminal picker plus `Ctrl+K` palette.
+  </Card>
+  <Card title="Verify">
+    Link checker with safe bulk actions (update moved URLs with title refetch, quarantine dead ones) and reindex repair that adopts orphans, relinks siblings, and rebuilds search without ever deleting your data.
+  </Card>
+  <Card title="Multiply">
+    Every action on every frontend: CLI, web UI, offline desktop app, Android app, or self-hosted server with token auth and remote mode. Multi-device sync with tombstones and idempotent replay, plus one-click backup and restore.
+  </Card>
+</CardGrid>
 
 ## Download
 
-<CardGrid>
-  <Card title="Linux" icon="linux">
-    Build from source, Arch Linux, or NixOS flake.
 
-    <LinkButton href="/install/linux/" icon="document">Linux install</LinkButton>
+<CardGrid>
+  <Card title="Windows" icon="seti:windows">
+    Installer (with automatic PATH handling) or portable zip.
+
+    <LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-setup-x64.exe" icon="down-arrow">Installer</LinkButton>
+    <LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-windows-x86_64.zip" icon="down-arrow" variant="secondary">Portable zip</LinkButton>
+    <LinkButton href="/install/windows/" icon="document" variant="minimal">Setup guide</LinkButton>
+  </Card>
+  <Card title="Linux" icon="linux">
+    Appimage version is available for all distros, although it only contains the desktop version. You can find distro sepcific package in all linux options below.
+
+    <LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-x86_64.AppImage" icon="down-arrow">x86_64</LinkButton>
+    <LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-linux-aarch64.AppImage" icon="down-arrow" variant="secondary">ARM64</LinkButton>
+    <LinkButton href="/install/linux/" icon="document" variant="minimal">All Linux options</LinkButton>
   </Card>
   <Card title="macOS" icon="apple">
-    Build from source with Homebrew dependencies.
+    MacOS app only includes the desktop version, To install CLI as well find more in [details](/install/macos/)
 
-    <LinkButton href="/install/macos/" icon="document">macOS install</LinkButton>
-  </Card>
-  <Card title="Windows" icon="seti:windows">
-    Installer-based setup.
-
-    <LinkButton href="/install/windows/" icon="document">Windows install</LinkButton>
+    <LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-desktop-darwin.dmg" icon="down-arrow">Disk image</LinkButton>
+    <LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-cli-darwin.tar.gz" icon="down-arrow" variant="secondary">CLI tools</LinkButton>
+    <LinkButton href="/install/macos/" icon="document" variant="minimal">Setup guide</LinkButton>
   </Card>
   <Card title="Android" icon="mobile-android">
-    Native app, standalone or server-connected.
+    Universal APK, standalone or server-connected.
 
-    <LinkButton href="/install/android/" icon="document">Android install</LinkButton>
+    <LinkButton href="https://github.com/liber-bkm/liber/releases/latest/download/liber-app-universal.apk" icon="down-arrow">APK</LinkButton>
+    <LinkButton href="/install/android/" icon="document" variant="minimal">Setup guide</LinkButton>
   </Card>
 </CardGrid>

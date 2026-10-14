@@ -1,160 +1,264 @@
 ---
 title: CLI reference
-description: Complete liber command and flag reference (v0.9.2).
+description: Every liber command and flag, mirrored from liber --help.
 ---
 
-Source of truth is `liber --help` / bare `liber`. This page mirrors it for search and copy-paste.
+Source of truth is `liber --help` (reference generated from `liber --help` v0.11.0; when in doubt the binary is the truth). Specs accept short numeric ids, UUID prefixes, comma lists, and dash ranges (`1-3,5`, at most 1000 ids per range). `--uuid` on any command shows full UUIDs instead.
 
 ```text
-liber - a small CLI bookmark manager
+Usage: liber [OPTIONS] [COMMAND]
 
-Usage:
-  liber <url>                    save a bookmark
-  liber <url> -i                 save interactively (prompts for description, tags, folder)
-  liber <url> -md                also write a markdown copy
-  liber <url> -a                 also write a full-page archive; backend is chosen by
-                                   config archive_backend: auto (default) tries single-file,
-                                   then monolith, then the built-in static snapshot
-  liber <url> -md -a             both markdown and archive
-  liber <url> -t tag-a tag-b     attach tags at creation time
-  liber <url> -f subfold         save into a subfolder of the base directory
-  liber <url> -at report.pdf     attach a file (repeatable; copied into the collection)
-  liber -s                       search/browse bookmarks, open or edit them
-  liber -sn / -su / -st / -sd / -sf
-                                  same, but restricted to one field: title / url / tags /
-                                  description / folder (combine freely, e.g. -sdf = folder+description)
-  liber -sl                      force the plain prompt (skip fzf even if installed)
-  liber -sld                     legacy prompt restricted to descriptions (mix -l with any of n/u/t/d/f)
-  liber -s --deep                also full-text search inside archived pages (asks for a query
-                                    first, then browses matches; combine with -sn/-sd/etc as usual)
-  liber -sl --deep               same, forced to the plain prompt
-  liber -s --sort <mode>         order results: newest, oldest, visited, or title
-                                    (default orders by relevance: title match first)
-  liber -l                       list all bookmarks with their ids
-  liber -e <id>                  edit a bookmark interactively (also offers to add a
-                                  markdown copy or archive if either is missing)
-  liber -e <id> -t tag-a tag-b   set a bookmark's tags directly
-  liber -e <id> -f subfold       move a bookmark to a different folder
-  liber -e <id> -u <url>         change a bookmark's URL (the saved html/material
-                                   is rewritten; filenames stay as they are)
-  liber -e <id> -md              add a markdown copy if it doesn't have one yet
-  liber -e <id> -a               add an archive if it doesn't have one yet
-  liber -e <id> -at file.pdf     attach a file (repeatable)
-  liber -e <id> -dt notes.pdf    detach an attachment by number or name (its saved
-                                   copy is deleted; interactive edit lists the numbers)
-  liber -e <ids> ...             <id> can also be a range/list: 1-3, 2,5,3, or 1-4,7-9 --
-                                  applies the same flags (or interactive edit) to each
-  liber -d <id>                  delete a bookmark (asks for confirmation)
-  liber -d <id> -y               delete without confirmation
-  liber -d <ids>                 <id> can also be a range/list, same as -e (one combined
-                                   confirmation listing everything that will be deleted)
-   liber -o <id>                  open a bookmark in the browser without the search menu
-                                    (accepts ranges like -e/-d; counts as an open for
-                                    --history, same as the search menu's (o) action)
-   liber -o <query>               same, but looks the bookmark up by search text
-                                    (one match opens directly, several offer a pick)
-   liber pick <query>             print a matching bookmark's URL to stdout, for pipes
-  liber -r                       reindex: adopt bookmark files found on disk but
-                                   missing from the index, relink sibling
-                                   markdown/archive copies, keep entries with
-                                   missing files as pending
-  liber -r --prune              same, dropping pending entries (surviving
-                                   markdown/archive copies move to
-                                   <base_dir>/unindexed/)
-  liber -r --compact            same, renumbering ids to close gaps
-  liber -r --merge               same, first folding sync conflict copies of the
-                                   index into one (collisions get fresh ids,
-                                   duplicates fold away, consumed copies move
-                                   to <base_dir>/.liber/resolved/)
-  liber -r --merge --all         same, treating every .liber/*.json except
-                                   index.json as a merge candidate (Drive style
-                                   copies without conflict in the name)
-  liber -r --prune-journal        delete applied journal files older than 90 days
-                                   (see "Sync")
-  liber --import <path>          import a browser bookmark export (Netscape HTML format)
-  liber --import <path> -md -a   same, also generating markdown/archives for each (slow)
-  liber --export-bookmarks <path>
-                                 write the collection as a browser bookmark export
-                                 (Netscape HTML format, re-importable)
-  liber --tags                   list all tags with counts
-  liber --tags rename <a> <b>    rename a tag everywhere (renaming onto an existing
-                                  tag merges into it -- no separate merge command)
-  liber --tags delete <tag>      remove a tag from every bookmark that has it
-  liber --folders                list all folders with counts
-  liber --folders rename <a> <b> rename a folder (and its subfolders) everywhere;
-                                  physically moves each bookmark's files
-  liber --folders delete <f>     move a folder's bookmarks back to the root
-   liber --history                list bookmarks by most recently opened (via -s's (o) action)
-   liber --check [ids]            check link health: report dead/moved/uncertain,
-                                    then prompt per item (update, delete, quarantine, skip)
-   liber --check --workers N      same, with N parallel requests (default 12)
-   liber --check --stale 720h     same, skipping bookmarks checked within the duration
-  liber --auto add --match <str> --folder <f> --tag <t1 t2>
-                                   auto-classify new bookmarks whose url contains <str> (folder
-                                   and/or tags; also applied once, immediately, to matching
-                                   existing bookmarks -- a later manual move/edit always sticks)
-                                   <str> may be prefixed: "host:example.com" matches only the
-                                   host, "title:docs" only the title; bare is url as before
-  liber --auto                   list automations and how many bookmarks each has classified
-  liber --auto edit <id> [--match x] [--folder y] [--tag t1 t2] [--reapply]
-                                  change a rule; --reapply re-syncs bookmarks it already
-                                  classified (skipping any since manually moved/retagged)
-  liber --auto delete <id>       remove a rule (bookmarks it already classified are untouched)
-   liber --auto apply [<id>]      re-run one rule, or all of them, against existing bookmarks
-   liber --auto learn             suggest host rules from folder clusters
-                                    (default: hosts with 3+ bookmarks in one folder)
-   liber --auto learn --min N --create
-                                    tune the threshold, or create all without asking
-  liber --sync                   commit the collection, if <base_dir> is inside a jj or git repo
-  liber --sync -p                same, then push
-  liber --profile                list profiles (base_dir subfolders that isolate a whole
-                                  collection: bookmarks, tags, folders, automations, everything),
-                                  marking the active one
-  liber --profile <name>         switch to <name>, creating it first if it's new
-  liber --profile default        switch back to using <base_dir> directly (no profile)
-  liber --profile delete <name>  stop tracking a profile (its folder and data are untouched)
-  liber config                   show the active config file and its path
-  liber config set <key> <val>   set one config key (validated before writing)
-  liber -v                       print the version
-  liber --serve                  local web UI at http://127.0.0.1:8080 -- search (with the
-                                   same scoping/deep options as -s), plus add, edit, delete,
-                                   and a settings/gear page (tools, dirs, backends, rules)
-  liber --serve --addr <host:port>
-                                   use a different address (non-loopback prints a warning:
-                                   it exposes read/add/edit/delete access, no login)
-  liber --serve --auth-token <tok>
-                                   require a token: browser login at /login,
-                                   API clients send Authorization: Bearer
-                                   (or set LIBER_AUTH_TOKEN instead of the flag)
-  liber --export-site [dir]      write a static, browsable index.html of the whole
-                                   collection (default <base_dir>/site); links point at
-                                   your existing html/markdown/archive/attachment files
-  liber completion bash|zsh|fish print the completion script for your shell
+Commands:
+  add            Add one bookmark, or several at once
+  list           Search and list
+  open           Open in browser, records history
+  edit           Update fields, or full terminal editor with no flags
+  delete         Delete with confirm
+  reindex        Repair the library
+  export         Static site or Netscape export
+  import         Netscape import
+  backup         Self-contained tarball of the library
+  restore        Replace library from a backup
+  init           First-run setup wizard
+  tags           List, rename, delete tags
+  folders        List, rename, delete folders
+  auto           Automation rules
+  history        Recently opened with open counts
+  check          Link check
+  archive        Archive a page
+  attachments    List attachments
+  sync           Bundle exchange, HTTP push/pull, snapshots, prune
+  searches       Saved search presets
+  config         Get, set, list configuration
+  pick           Fuzzy TUI picker
+  profile        Named base-dir profiles
+  serve          Self host API plus web UI
+  discover       List liber servers on the LAN
+  completion     Shell completions
 
-Flags may be combined, e.g.:
-  liber https://example.com -i -t news reading -f articles -md -a
-
-liber -s uses fzf for picking if it's installed on PATH (title/url/tags/folder
-on the left, a markdown/archive/attachment presence badge, and a full detail
-preview -- including description -- on the right), otherwise falls back to a
-plain numbered prompt. Use -sl to force the plain prompt regardless of whether
-fzf is installed. Either can be narrowed to specific fields with the n/u/t/d/f
-letters shown above.
-
-Attachments are local files copied into <base_dir>/attachments (any type: PDFs,
-extra snapshots, downloads); "-i" prompts for them, the search menu's
-attachmen(t)s action opens/manages them, and badge "att"/"attN" shows the count.
-
-Adding a bookmark whose URL normalizes to one you already have (ignoring
-trailing slashes, tracking params, and default ports) asks before adding a
-duplicate; liber --import skips likely duplicates automatically instead.
-
-Config lives at $XDG_CONFIG_HOME/liber/config.json (created on first run).
+Options:
+  -l, --list    Legacy list shortcut
+  -s, --serve   Legacy serve stub
+  --uuid        Show full UUIDs
+  -h, --help    Print help
+  -V, --version Print version
 ```
 
-Search behavior notes from `--help`:
+## add
 
-- `liber -s` uses fzf if on `PATH` (title/url/tags/folder plus badges plus detail preview), else a plain numbered prompt; `-sl` forces plain.
-- Attachments live in `<base_dir>/attachments`; badges `att`/`attN` show counts.
-- URL dedupe ignores trailing slashes, tracking params, and default ports: add prompts, `--import` skips silently.
-- Config: `$XDG_CONFIG_HOME/liber/config.json` (created on first run).
+```text
+Usage: liber add [OPTIONS] <URL>...
+
+Options:
+      --title <TITLE>              Title (else fetched from the page, else the URL)
+  -t, --tags <TAGS>                Tags
+  -f, --folder <FOLDER>            Folder
+      --description <DESCRIPTION>  Description
+      --markdown                   Also write a markdown notes copy
+      --archive                    Also save an archived copy
+      --attach <ATTACH>            Attach a local file (repeatable)
+  -i, --interactive                Prompt for missing fields (needs a terminal)
+```
+
+
+You can combine different flags such as `liber add --tag <tags> --folder <folder> <url>`. `liber add -i` opens interactive prompt to add url. Single add fetches the page title when `--title` is missing and falls back to the URL on failure. Duplicates print the existing entry and ask before continuing. Bulk add shares `--tags`, `--folder`, `--markdown`, and `--archive` across all URLs and reports `Added X, skipped Y duplicates, failed Z of N`; single-URL flags (`--title`, `--description`, `--attach`, `-i`) are refused in bulk.
+
+## list
+
+```text
+Usage: liber list [OPTIONS] [QUERY]
+
+Options:
+      --sort <SORT>   newest|oldest|visited|title (default: newest, or relevance with a query)
+      --deep          Also search saved page content and notes, with snippets
+      --in <FIELDS>   Restrict bare words: title,url,tag,folder,desc (or letters n,u,t,d,f)
+```
+
+`[md]` and `[arch]` markers show notes and archives. Query terms accept `field:value` prefixes; see [Searching](/cli/searching/).
+
+## open
+
+```text
+Usage: liber open <SPEC>
+```
+
+Falls back to search on miss (one match opens, several offer a pick). Records history.
+
+## edit
+
+```text
+Usage: liber edit [OPTIONS] <SPEC>
+
+Options:
+  -u, --url <URL>                  Change URL (saved files rewritten, filenames kept)
+      --title <TITLE>              Set title
+      --description <DESCRIPTION>   Set description
+  -t, --tags [<TAGS>...]           Set tags
+  -f, --folder <FOLDER>            Move to folder
+      --markdown                   Add a notes copy if missing
+      --attach <ATTACH>            Attach a file (repeatable)
+      --detach <DETACH>            Detach by number or name
+```
+
+With no flags, opens the full terminal editor (see [Terminal UI](/cli/terminal-ui/)).
+
+## delete
+
+```text
+Usage: liber delete [--yes] <SPEC>
+```
+
+Asks for confirmation unless `--yes`.
+
+## reindex
+
+```text
+Usage: liber reindex [--prune] [--compact-ids]
+```
+
+Adopt orphans, relink siblings, sweep conflicts, rebuild search. Missing files stay pending unless `--prune`; `--compact-ids` additionally needs `--prune` and closes short-id gaps to dense `1..N`.
+
+## export
+
+```text
+Usage: liber export (--site [DIR] | --bookmarks <FILE>)
+```
+
+Static `index.html` with relative links (default dir), or a re-importable Netscape file.
+
+## import
+
+```text
+Usage: liber import [--markdown] [--archive] <FILE>
+```
+
+Netscape import; duplicates skipped, archive failures reported as warnings.
+
+## backup and restore
+
+```text
+Usage: liber backup <FILE>
+Usage: liber restore [--force] [--yes] <FILE>
+```
+
+Self-contained tarball (content plus index plus manifest; `site/` and search index excluded). Restore refuses a non-empty library without `--force`, confirms unless `--yes`, then reindexes.
+
+## init
+
+```text
+Usage: liber init
+```
+
+First-run setup wizard (base dir, device id, backend, token). Refuses when already configured, needs a terminal.
+
+## tags and folders
+
+```text
+Usage: liber tags (list | rename <A> <B> | delete <TAG>)
+Usage: liber folders (list | rename <A> <B> | delete <FOLDER>)
+```
+
+Tag rename merges onto existing tags; folder rename moves subtrees; folder delete moves bookmarks to root. Deletes go through the confirm flow.
+
+## auto
+
+```text
+Usage: liber auto (add --match X [--folder F] [--tag T...] | list | edit <id> [...] [--reapply] | apply [id] | learn [--min N] [--create] | delete <id>)
+```
+
+Rules match `title:`/`host:` prefixes else URL substring, case insensitive. `learn` suggests rules from host clusters (`--create` asks per suggestion). Deleting a rule leaves classified bookmarks untouched.
+
+## history
+
+```text
+Usage: liber history
+```
+
+Recently opened bookmarks with open counts.
+
+## check
+
+```text
+Usage: liber check [OPTIONS] [SPEC]
+
+Options:
+      --apply                Bulk update moved URLs plus quarantine dead ones
+      --workers <WORKERS>    Parallel requests [default: 12]
+      --stale <DURATION>     Skip bookmarks checked within DURATION (720h, 7d, repeats; bare digits mean hours)
+      --stale-hours <HOURS>  Deprecated alias for --stale
+```
+
+TTY apply prompts per item with retitle and delete options. `--apply` updates moved URLs (skipping targets already bookmarked), refetches titles, and quarantines dead ones; confirm-gated deletes ask first.
+
+## archive
+
+```text
+Usage: liber archive [--backend builtin|browser|single-file|monolith|auto] <SPEC>
+```
+
+Explicit backends are strict; `auto` chains with warnings at each fallback.
+
+## attachments
+
+```text
+Usage: liber attachments <SPEC>
+```
+
+List attachments with numbers.
+
+## sync
+
+```text
+Usage: liber sync (export <FILE> [--since N] | import <FILE> | commit [--message T] [--push] | prune [--days N] | push <URL> [--token T] [--since C] | pull <URL> [--token T] [--since C])
+```
+
+Bundle exchange between devices, git snapshots (never inits a repo), HTTP push/pull against `liber-serve`, oplog prune (default 90 days). `--since` filters by oplog sequence; a clean tree reports nothing-to-commit in the body.
+
+## searches
+
+```text
+Usage: liber searches ([list] | add <NAME> [--query Q] [--scope FIELDS] [--sort MODE] | delete <NAME> | run <NAME>)
+```
+
+Saved search presets. `run` lists through the normal search path. Adds upsert case-insensitively; names cap at 64 chars; scope and sort validate against the same parsers as `list`. See [Searching](/cli/searching/).
+
+## config
+
+```text
+Usage: liber config (get <KEY> | set <KEY> <VALUE> | list)
+```
+
+See [Configuration overview](/config/overview/) for keys. `list` prints the whole config as JSON.
+
+## pick
+
+```text
+Usage: liber pick [QUERY]
+```
+
+Fuzzy TUI picker with preview, then a menu (open, archived copy, notes, edit). Prints the URL when piped. Falls back to a numbered prompt without a TTY.
+
+## profile
+
+```text
+Usage: liber profile (list | switch <NAME> | delete <NAME>)
+```
+
+Named base-dir profiles sharing one config. Delete untracks only, files stay.
+
+## serve and discover
+
+```text
+Usage: liber serve [--addr 127.0.0.1:8080] [--auth-token TOKEN] [--static-dir DIR] [--qr] [--no-mdns]
+Usage: liber discover [--timeout 5]
+```
+
+Serve prints localhost and LAN URLs. `--qr` prints a pairing code, mDNS advertises unless `--no-mdns`.
+
+## completion
+
+```text
+Usage: liber completion <SHELL>
+```
+
+Shells: bash, zsh, fish, powershell, elvish.
