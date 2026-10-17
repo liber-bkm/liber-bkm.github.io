@@ -9,6 +9,19 @@ Duplicate detection runs live as you type: on a match the dialog offers "add any
 
 Archive and attachment behavior (backends, unique filenames, sync) is shared with the CLI; see [Archive backends](/config/archive-backends/). CLI equivalent: [Adding](/cli/adding/).
 
+## Extension 
+
+The liber extension (Chrome and Firefox) saves the current page to
+your library in two clicks, without opening a liber app or tab.
+
+Install it load-unpacked from the `extension/` folder (store
+listings are manual for now), open its Options, and enter the server
+URL plus token. The Test button verifies the connection. Both stay
+in the browser only and are never synced. The extension needs a
+running `liber serve`; it cannot start the server itself.
+For firefox you may have to visit [debugging page](about:debugging) and load 
+`manifest.json` from extension folder.
+
 ## Capture without an extension
 
 A bookmarklet opens the add dialog prefilled with the current page, no extension needed. Create a bookmark with this URL (change the base to match your `serve --addr`, default `http://127.0.0.1:8080`, LAN address included):

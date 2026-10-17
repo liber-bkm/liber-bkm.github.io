@@ -27,6 +27,8 @@ Adding an existing URL returns the existing entry instead of a second copy. The 
 
 `--archive` snapshots the page through the configured `archive_backend`. See [Archive backends](/config/archive-backends/).
 
-In the apps: adding works through the add dialog with the same options. See [Adding in the apps](/app/adding/).
+:::note
+To add bookmarks with single click see [Adding in the apps](/app/adding/).
+:::
 
 Next: [Searching and opening](/cli/searching/).
